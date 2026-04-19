@@ -1,52 +1,94 @@
 import { useEffect } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import { Toaster } from "sonner";
+import Navbar from "@/components/site/Navbar";
+import Hero from "@/components/site/Hero";
+import {
+  PillarsSection,
+  ProgramsSection,
+  ModulesSection,
+  SchemaSection,
+} from "@/components/site/Sections";
+import {
+  ResearchSection,
+  PublicationsSection,
+  TeamSection,
+  TestimonialsSection,
+} from "@/components/site/Sections2";
+import Contact from "@/components/site/Contact";
+import Footer from "@/components/site/Footer";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
+function useFadeUp() {
   useEffect(() => {
-    helloWorldApi();
+    if (!("IntersectionObserver" in window)) return;
+    const els = document.querySelectorAll(".fade-up");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, []);
+}
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+function useSmoothScroll() {
+  useEffect(() => {
+    const handler = (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (!href || href === "#") return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      const top = target.getBoundingClientRect().top + window.scrollY - 82;
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, []);
+}
 
 function App() {
+  useFadeUp();
+  useSmoothScroll();
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <div className="App" data-testid="app-root">
+      <Navbar />
+      <main>
+        <Hero />
+        <PillarsSection />
+        <ProgramsSection />
+        <ModulesSection />
+        <SchemaSection />
+        <ResearchSection />
+        <PublicationsSection />
+        <TeamSection />
+        <TestimonialsSection />
+        <Contact />
+      </main>
+      <Footer />
+      <Toaster
+        position="top-center"
+        theme="dark"
+        toastOptions={{
+          style: {
+            background: "#0E2333",
+            border: "1px solid rgba(191,160,106,0.35)",
+            color: "#fff",
+            borderRadius: 0,
+            fontFamily: "DM Sans, sans-serif",
+          },
+        }}
+      />
     </div>
   );
 }
