@@ -202,6 +202,102 @@ export const TEAM = [
   ],
 ];
 
+export const DIRECCION = [
+  {
+    initials: "JCC",
+    name: "Josefina Cáceres Cortés, Ph.D.",
+    role: "Directora Científica & Fundadora",
+    bio: "Psicóloga clínica y directora del Instituto DBT Chile. Única representante en Chile dentro del capítulo de investigación de la WDBTA. Formada y afiliada en terapia de esquemas, ISST. Su enfoque integra los aportes de Linehan, Bohus, Damasio, Porges, Siegel y Yi-Yuan Tang.",
+    credentials: [
+      "Ph.D. — Formación doctoral",
+      "WDBTA Research Member — única en Chile",
+      "Certificación ISST — Schema Therapy",
+      "Fundadora NexariaLabs · LaKaira AI",
+    ],
+    tags: ["WDBTA", "ISST", "APA", "Ph.D."],
+  },
+  {
+    initials: "TV",
+    name: "Trahice Véliz",
+    role: "Subdirectora Clínica · Psicóloga",
+    bio: "Especialista en DBT, Género, Psicología Criminal y Forense. Cofundadora Unidad Transitando del Instituto Psiquiátrico Dr. José Horwitz Barak.",
+    credentials: [
+      "Máster Psicología Criminal — Univ. Europea, España",
+      "Formación completa DBT individual, grupal y familiar",
+      "Formación DBT-SUD — trastornos uso de sustancias",
+      "Socia activa Sociedad Española de DBT",
+    ],
+    tags: ["DBT", "DBT-SUD", "SEETP", "MBCT"],
+  },
+];
+
+export const EQUIPO_CLINICO = [
+  {
+    initials: "FM",
+    name: "Dr. Felipe Moraga",
+    role: "Médico Psiquiatra",
+    bio: "Médico cirujano U. de La Frontera, psiquiatra U. de Valparaíso. Especialista en desregulación emocional, trastornos de personalidad e impulsividad. Formación en DBT y psiquiatría del adulto.",
+    tags: ["Psiquiatría", "DBT"],
+  },
+  {
+    initials: "FB",
+    name: "Fernanda Bizama",
+    role: "Psicóloga Clínica",
+    bio: "Diplomado Clínico Adulto. Experiencia en adolescentes y adultos de alta complejidad. Atención en Hospital Militar de Santiago. Formación DBT-SUD para trastorno uso de sustancias.",
+    tags: ["DBT", "DBT-SUD"],
+  },
+  {
+    initials: "FA",
+    name: "Francisca Alliende Kupfer",
+    role: "Psicóloga Infantojuvenil · Adultos",
+    bio: "U. de los Andes, distinción. Máster Neurorehabilitación (ISEP, España). Certificación DBT — Asoc. Española. Especialista en desregulación emocional y autolesiones en población infantojuvenil.",
+    tags: ["DBT", "Infanto"],
+  },
+  {
+    initials: "CJ",
+    name: "Catalina Jara Albetman",
+    role: "Psicóloga Clínica",
+    bio: "U. del Desarrollo. Formación en psicología clínica y psico-jurídica. Diplomado en Psicología Jurídica, PUC. Curso RO DBT nivel 1. Experiencia en contextos penitenciarios y psiquiátricos.",
+    tags: ["DBT", "RO-DBT"],
+  },
+  {
+    initials: "VC",
+    name: "Vanessa Contreras",
+    role: "Terapeuta Ocupacional · Infantojuvenil",
+    bio: "Especialista en neurodesarrollo, integración sensorial y TEA. Certificación internacional ADOS-2 y ADI-R. Intervención en trastornos de personalidad y hábitos saludables.",
+    tags: ["TO", "ADOS-2", "TEA"],
+  },
+  {
+    initials: "CS",
+    name: "Carolina Sánchez Soto",
+    role: "Trabajadora Social",
+    bio: "Apoyo social y acompañamiento psicosocial a pacientes y familias. Coordinación de recursos comunitarios y trabajo interdisciplinario.",
+    tags: ["Social"],
+  },
+  {
+    initials: "OC",
+    name: "Olga Castillo Álvarez",
+    role: "Enfermera · Socióloga",
+    bio: "Enfermera Universitaria y Socióloga. Actualmente en DBT Adicciones en Zentralinstitut für Seelische Gesundheit, Alemania. Dominio de alemán.",
+    tags: ["Enfermería", "DBT"],
+  },
+  {
+    initials: "JL",
+    name: "Jorge Loyola Rodó",
+    role: "Analista de Sistemas",
+    bio: "Soporte tecnológico e infraestructura digital del Instituto. Coordinación de plataformas clínicas y sistemas de gestión.",
+    tags: ["TI"],
+  },
+];
+
+export const CERTIFICATIONS = [
+  { acronym: "WDBTA", name: "World DBT Association" },
+  { acronym: "ISST", name: "International Society of Schema Therapy" },
+  { acronym: "APA", name: "American Psychological Association" },
+  { acronym: "SEETP", name: "Soc. Española Estudios Trastorno Personalidad" },
+  { acronym: "Zepp", name: "Zepp Foundation" },
+];
+
 export const TESTIMONIALS = [
   {
     text: "El Instituto DBT Chile cambió mi relación conmigo misma. Después de años de tratamientos que no funcionaban, aquí encontré herramientas reales que puedo usar cada día.",

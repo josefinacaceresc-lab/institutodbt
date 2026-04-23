@@ -1,4 +1,4 @@
-import { NAV_ITEMS, SITE, whatsappUrl } from "@/data/site";
+import { NAV_ITEMS, SITE, whatsappUrl, CERTIFICATIONS } from "@/data/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -6,6 +6,30 @@ export default function Footer() {
     <>
       <footer className="footer-root" data-testid="site-footer">
         <div className="footer-inner">
+          {/* ─── Certifications strip (museum plaque style) ─── */}
+          <div className="footer-certs" data-testid="footer-certifications">
+            <div className="footer-certs-label">
+              <span className="label">Certificaciones & afiliaciones</span>
+            </div>
+            <div className="footer-certs-list">
+              {CERTIFICATIONS.map((c) => (
+                <div
+                  key={c.acronym}
+                  className="footer-cert"
+                  data-testid={`footer-cert-${c.acronym.toLowerCase()}`}
+                >
+                  <span className="footer-cert-acronym dbt-serif">
+                    {c.acronym}
+                  </span>
+                  <span className="footer-cert-rule" aria-hidden="true" />
+                  <span className="footer-cert-name">{c.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="footer-divider" aria-hidden="true" />
+
           <div className="footer-brand">
             <span className="footer-brand-mark">D</span>
             <div>

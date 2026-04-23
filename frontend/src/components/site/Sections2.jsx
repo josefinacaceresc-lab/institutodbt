@@ -1,5 +1,13 @@
 import { Cpu, ArrowUpRight } from "lucide-react";
-import { PUBLICATIONS, TEAM, TESTIMONIALS, SITE } from "@/data/site";
+import {
+  PUBLICATIONS,
+  TEAM,
+  TESTIMONIALS,
+  SITE,
+  DIRECCION,
+  EQUIPO_CLINICO,
+  CERTIFICATIONS,
+} from "@/data/site";
 
 export function ResearchSection() {
   return (
@@ -112,32 +120,145 @@ export function PublicationsSection() {
 
 export function TeamSection() {
   return (
-    <section className="section-pad sec-cream" id="equipo">
+    <section className="section-pad sec-cream" id="equipo" data-testid="equipo-section">
       <div className="container-x">
-        <div className="heading-center">
-          <span className="label label-center">Quiénes somos</span>
-          <h2 className="dbt-serif" style={{ marginTop: "1rem" }}>
-            Equipo clínico
+        {/* ─── Header ─── */}
+        <div className="team-header">
+          <span className="label">Quiénes somos</span>
+          <h2 className="dbt-serif team-headline">
+            Las personas que te <em>acompañan</em>
           </h2>
+          <p className="team-sub">
+            Psiquiatras, psicólogos y profesionales de salud dedicados a
+            terapias basadas en evidencia. Liderado por la única Ph.D. con
+            afiliación WDBTA activa en Chile.
+          </p>
         </div>
-        <div className="team-grid" data-testid="team-grid">
-          {TEAM.map(([initials, name, role, bio]) => (
-            <div
-              key={name}
-              className="team-card fade-up"
-              data-testid={`team-${initials.toLowerCase()}`}
+
+        {/* ─── Tier 1 — DIRECCIÓN ─── */}
+        <div className="tier-marker">
+          <span className="tier-number dbt-serif">01</span>
+          <div className="tier-title">
+            <span className="label">Dirección</span>
+            <span className="tier-caption">
+              Liderazgo científico y clínico del Instituto
+            </span>
+          </div>
+          <div className="tier-rule" aria-hidden="true" />
+        </div>
+
+        <div className="direccion-grid">
+          {DIRECCION.map((leader, idx) => (
+            <article
+              key={leader.initials}
+              className={`direccion-card direccion-card--${idx === 0 ? "primary" : "secondary"} fade-up`}
+              data-testid={`direccion-card-${leader.initials.toLowerCase()}`}
             >
-              <div className="team-initials dbt-serif">{initials}</div>
-              <h3>{name}</h3>
-              <div className="team-role">{role}</div>
-              <p>{bio}</p>
-            </div>
+              <div className="direccion-portrait" aria-hidden="true">
+                <span className="direccion-portrait-corner direccion-portrait-corner--tl" />
+                <span className="direccion-portrait-corner direccion-portrait-corner--tr" />
+                <span className="direccion-portrait-corner direccion-portrait-corner--bl" />
+                <span className="direccion-portrait-corner direccion-portrait-corner--br" />
+                <span className="direccion-initials dbt-serif">
+                  {leader.initials}
+                </span>
+                <span className="direccion-photo-hint">Agregar foto</span>
+              </div>
+
+              <div className="direccion-body">
+                <span className="label direccion-role">{leader.role}</span>
+                <h3 className="dbt-serif direccion-name">{leader.name}</h3>
+                <p className="direccion-bio">{leader.bio}</p>
+
+                <ul className="direccion-credentials" role="list">
+                  {leader.credentials.map((c, i) => (
+                    <li key={i}>{c}</li>
+                  ))}
+                </ul>
+
+                <div className="direccion-tags">
+                  {leader.tags.map((t, i) => (
+                    <span key={t} className="hallmark">
+                      <span className="hallmark-text dbt-serif">{t}</span>
+                      {i < leader.tags.length - 1 && (
+                        <span className="hallmark-dot" aria-hidden="true">·</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
           ))}
+        </div>
+
+        {/* ─── Tier 2 — EQUIPO CLÍNICO ─── */}
+        <div className="tier-marker tier-marker--spaced">
+          <span className="tier-number dbt-serif">02</span>
+          <div className="tier-title">
+            <span className="label">Equipo clínico</span>
+            <span className="tier-caption">
+              Psicólogos, médicos y profesionales de salud
+            </span>
+          </div>
+          <div className="tier-rule" aria-hidden="true" />
+        </div>
+
+        <div className="clinico-grid" data-testid="equipo-clinico-grid">
+          {EQUIPO_CLINICO.map((m) => (
+            <article
+              key={m.initials}
+              className="clinico-card fade-up"
+              data-testid={`equipo-card-${m.initials.toLowerCase()}`}
+            >
+              <div className="clinico-initials-wrap">
+                <span className="clinico-initials dbt-serif">{m.initials}</span>
+                <span className="clinico-corner" aria-hidden="true" />
+              </div>
+              <h4 className="clinico-name dbt-serif">{m.name}</h4>
+              <div className="clinico-role">{m.role}</div>
+              <div className="clinico-bio-sep" aria-hidden="true" />
+              <p className="clinico-bio">{m.bio}</p>
+              <div className="clinico-tags">
+                {m.tags.map((t, i) => (
+                  <span key={t} className="hallmark hallmark--sm">
+                    <span className="hallmark-text dbt-serif">{t}</span>
+                    {i < m.tags.length - 1 && (
+                      <span className="hallmark-dot" aria-hidden="true">·</span>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* ─── Tier 3 — CERTIFICATIONS STRIP ─── */}
+        <div className="certifications-strip" data-testid="certifications-strip">
+          <div className="certifications-heading">
+            <span className="label">Certificaciones & afiliaciones internacionales</span>
+          </div>
+          <div className="certifications-items">
+            {CERTIFICATIONS.map((c) => (
+              <div
+                key={c.acronym}
+                className="certification-plaque"
+                data-testid={`certification-${c.acronym.toLowerCase()}`}
+              >
+                <div className="certification-acronym dbt-serif">
+                  {c.acronym}
+                </div>
+                <div className="certification-rule" aria-hidden="true" />
+                <div className="certification-name">{c.name}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+// eslint-disable-next-line no-unused-vars
+const _unused = TEAM;
 
 export function TestimonialsSection() {
   return (
