@@ -538,167 +538,422 @@
     font-weight: 500;
 }
 
-/* ─── CERTIFICATION CHIPS (Schema section) ─── */
-.cert-row {
-    display: flex;
-    gap: 0.9rem;
-    flex-wrap: wrap;
-    margin-top: 1.8rem;
-}
-.cert-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: #fff;
-    border: 1px solid var(--border);
-    padding: 10px 16px 10px 12px;
-    text-decoration: none;
-    transition:
-        border-color 0.25s,
-        transform 0.25s,
-        box-shadow 0.25s;
-    min-height: 62px;
-}
-.cert-chip:hover {
-    border-color: var(--gold);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
-.cert-chip img {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-.cert-chip-label {
-    display: block;
-    font-size: 8.5px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    margin-bottom: 3px;
-}
-.cert-chip-name {
-    display: block;
-    font-family: "DM Serif Display", serif;
-    font-size: 16px;
-    color: var(--navy);
-    letter-spacing: 0.02em;
-}
-.cert-chip--static {
-    background: var(--navy);
-    border-color: var(--navy);
-}
-.cert-chip--static .cert-chip-label {
-    color: rgba(255, 255, 255, 0.55);
-}
-.cert-chip--static .cert-chip-name {
-    color: var(--gold);
-}
-.cert-chip-mark {
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gold);
-    font-size: 22px;
-    font-family: "DM Serif Display", serif;
-    border: 1px solid rgba(191, 160, 106, 0.35);
-    flex-shrink: 0;
-}
-
-/* ─── CREDENTIALS STRIP (between hero & pillars) ─── */
-.credentials-strip {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    padding: 44px 0;
+/* ─── ACREDITACIONES · Editorial luxury (navy hero block) ─── */
+.cred-hero {
     position: relative;
+    background: var(--navy);
+    color: #fff;
+    padding: 110px 0 120px;
+    overflow: hidden;
+    isolation: isolate;
 }
-.credentials-strip::before {
+.cred-hero::before {
+    /* top gold hairline rule */
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(191, 160, 106, 0.4) 25%,
+        rgba(191, 160, 106, 0.4) 75%,
+        transparent 100%
+    );
 }
-.credentials-inner {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 3rem;
-    align-items: center;
-}
-.credentials-label .label {
-    margin-bottom: 0.8rem;
-}
-.credentials-label p {
-    margin: 0;
-    font-size: 14px;
-    color: var(--ink-3);
-    max-width: 340px;
-}
-.credentials-logos {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
-    flex-wrap: wrap;
-}
-.credentials-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 18px;
-    text-decoration: none;
-    transition: opacity 0.25s;
-    filter: grayscale(0);
-}
-.credentials-logo:hover {
-    opacity: 0.85;
-}
-.credentials-logo img {
-    height: 68px;
-    width: auto;
-    object-fit: contain;
-}
-.credentials-logo span {
-    font-size: 10.5px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--navy);
-    font-weight: 500;
-    max-width: 160px;
-    line-height: 1.5;
-}
-.credentials-divider {
-    width: 1px;
-    align-self: stretch;
-    background: var(--border);
-    min-height: 60px;
+.cred-hero::after {
+    /* diagonal editorial texture */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -55deg,
+        transparent 0 80px,
+        rgba(191, 160, 106, 0.025) 80px 81px
+    );
+    pointer-events: none;
+    z-index: -1;
 }
 
-@media (max-width: 900px) {
-    .credentials-inner {
+.cred-hero-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.75rem;
+}
+
+.cred-hero-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 5rem;
+    align-items: center;
+}
+
+@media (max-width: 980px) {
+    .cred-hero {
+        padding: 80px 0;
+    }
+    .cred-hero-grid {
         grid-template-columns: 1fr;
-        text-align: center;
-    }
-    .credentials-label p {
-        margin: 0 auto;
-    }
-    .credentials-logos {
-        justify-content: center;
+        gap: 3.5rem;
     }
 }
-@media (max-width: 600px) {
-    .credentials-divider {
-        display: none;
+
+/* LEFT COLUMN — editorial copy */
+.cred-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.6rem;
+    font-weight: 500;
+}
+.cred-eyebrow-line {
+    display: inline-block;
+    width: 42px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.cred-headline {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.1;
+    color: #fff;
+    margin: 0 0 1.4rem;
+    letter-spacing: -0.01em;
+}
+.cred-headline em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.cred-sub {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: rgba(237, 231, 219, 0.75);
+    margin: 0 0 2rem;
+    max-width: 460px;
+    font-weight: 300;
+}
+.cred-sub strong {
+    color: #fff;
+    font-weight: 500;
+}
+
+.cred-rule {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 14px;
+    margin: 2rem 0;
+    max-width: 420px;
+}
+.cred-rule span:first-child,
+.cred-rule span:last-child {
+    display: block;
+    height: 1px;
+    background: rgba(191, 160, 106, 0.35);
+}
+.cred-rule-center {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    display: block;
+}
+
+.cred-factgrid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 2.5rem;
+    margin: 0;
+}
+.cred-factgrid dt {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-family: "DM Sans", sans-serif;
+}
+.cred-factgrid dd {
+    font-family: "DM Serif Display", serif;
+    font-size: 15px;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 560px) {
+    .cred-factgrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem 2rem;
     }
-    .credentials-logos {
-        gap: 1.8rem;
+}
+
+/* RIGHT COLUMN — asymmetric plaques (Museum passepartout treatment) */
+.cred-plaques {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+@media (max-width: 720px) {
+    .cred-plaques {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+        margin: 0 auto;
+        gap: 2rem;
     }
-    .credentials-logo img {
-        height: 56px;
-    }
+}
+
+.cred-plaque {
+    position: relative;
+    background: #ffffff;
+    padding: 38px 26px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    transition:
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.5s ease;
+    isolation: isolate;
+}
+.cred-plaque--wdbta {
+    transform: translateY(0);
+    z-index: 2;
+}
+.cred-plaque--isst {
+    transform: translateY(56px);
+    z-index: 1;
+}
+.cred-plaque:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45);
+}
+.cred-plaque--isst:hover {
+    transform: translateY(50px);
+}
+
+/* Museum corner marks (L-shaped gold corners) */
+.cred-plaque-corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+}
+.cred-plaque-corner--tl {
+    top: 8px;
+    left: 8px;
+    border-top: 1px solid var(--gold);
+    border-left: 1px solid var(--gold);
+}
+.cred-plaque-corner--tr {
+    top: 8px;
+    right: 8px;
+    border-top: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+}
+.cred-plaque-corner--bl {
+    bottom: 8px;
+    left: 8px;
+    border-bottom: 1px solid var(--gold);
+    border-left: 1px solid var(--gold);
+}
+.cred-plaque-corner--br {
+    bottom: 8px;
+    right: 8px;
+    border-bottom: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+}
+
+.cred-plaque-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 22px;
+    position: relative;
+}
+.cred-plaque-frame::before,
+.cred-plaque-frame::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: rgba(191, 160, 106, 0.25);
+    left: 0;
+}
+.cred-plaque-frame::before {
+    top: -6px;
+}
+.cred-plaque-frame::after {
+    bottom: -6px;
+}
+
+.cred-plaque-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: saturate(0.3) contrast(1.08);
+    transition:
+        filter 0.8s ease,
+        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cred-plaque:hover .cred-plaque-img {
+    filter: saturate(1) contrast(1);
+    transform: scale(1.03);
+}
+
+.cred-plaque-caption {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(206, 197, 178, 0.55);
+}
+.cred-plaque-org {
+    font-size: 20px;
+    color: var(--navy);
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+.cred-plaque-subtitle {
+    font-size: 10.5px;
+    color: var(--ink-3);
+    line-height: 1.45;
+    max-width: 210px;
+    margin: 0 auto 10px;
+    font-weight: 400;
+}
+.cred-plaque-role {
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-top: 6px;
+    display: inline-block;
+    padding-top: 8px;
+    border-top: 1px solid rgba(191, 160, 106, 0.3);
+    min-width: 140px;
+}
+
+/* ─── SCHEMA SECTION · Editorial seals ─── */
+.seal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.seal-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    text-decoration: none;
+    group: seal;
+}
+
+.seal-frame {
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: border-color 0.5s ease;
+}
+.seal-item:hover .seal-frame {
+    border-color: var(--gold);
+}
+.seal-frame::before,
+.seal-frame::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.seal-frame::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid var(--gold);
+    border-left: 1px solid var(--gold);
+}
+.seal-frame::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+}
+.seal-item:hover .seal-frame::before,
+.seal-item:hover .seal-frame::after {
+    opacity: 1;
+}
+
+.seal-frame img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: saturate(0.25) contrast(1.1);
+    transition: filter 0.7s ease, transform 0.5s ease;
+}
+.seal-item:hover .seal-frame img {
+    filter: saturate(1) contrast(1);
+    transform: scale(1.05);
+}
+
+.seal-frame--mono {
+    background: var(--navy);
+    border-color: var(--navy);
+}
+.seal-monogram {
+    color: var(--gold);
+    font-size: 22px;
+    line-height: 1;
+}
+
+.seal-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.seal-title {
+    font-size: 1.15rem;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+}
+.seal-sub {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    font-family: "DM Sans", sans-serif;
+}
+
+.seal-item--static {
+    cursor: default;
 }
 
 /* ─── RESEARCH ─── */

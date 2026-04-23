@@ -10,6 +10,7 @@ import {
   Map,
 } from "lucide-react";
 import { PILLARS, PROGRAMS, MODULES, SCHEMAS } from "@/data/site";
+import ProtocolMark from "@/components/site/ProtocolMark";
 
 const ICONS = {
   landmark: Landmark,
@@ -147,39 +148,49 @@ export function SchemaSection() {
               ofreciendo una comprensión más profunda de los patrones de
               sufrimiento y mayor eficacia terapéutica.
             </p>
-            <div className="cert-row" data-testid="schema-badges">
-              <a
-                href="https://schematherapysociety.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cert-chip"
-                data-testid="cert-isst"
-              >
-                <img src="/logos/isst.jpg" alt="ISST — International Society of Schema Therapy" />
-                <div>
-                  <span className="cert-chip-label">Certificación</span>
-                  <span className="cert-chip-name">ISST</span>
-                </div>
-              </a>
+            <div className="seal-row" data-testid="schema-badges">
               <a
                 href="https://www.wdbta.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cert-chip"
-                data-testid="cert-wdbta"
+                className="seal-item"
+                data-testid="schema-seal-wdbta"
+                aria-label="Miembro institucional WDBTA"
               >
-                <img src="/logos/wdbta.png" alt="WDBTA — World Dialectical Behavior Therapy Association" />
-                <div>
-                  <span className="cert-chip-label">Miembro institucional</span>
-                  <span className="cert-chip-name">WDBTA</span>
-                </div>
+                <span className="seal-frame">
+                  <img src="/logos/wdbta.png" alt="WDBTA" />
+                </span>
+                <span className="seal-text">
+                  <span className="seal-title dbt-serif">WDBTA</span>
+                  <span className="seal-sub">Miembro institucional</span>
+                </span>
               </a>
-              <div className="cert-chip cert-chip--static" data-testid="cert-protocolo">
-                <div className="cert-chip-mark">★</div>
-                <div>
-                  <span className="cert-chip-label">Protocolo</span>
-                  <span className="cert-chip-name">Exclusivo</span>
-                </div>
+
+              <a
+                href="https://schematherapysociety.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="seal-item"
+                data-testid="schema-seal-isst"
+                aria-label="Certificación ISST"
+              >
+                <span className="seal-frame">
+                  <img src="/logos/isst.jpg" alt="ISST" />
+                </span>
+                <span className="seal-text">
+                  <span className="seal-title dbt-serif">ISST</span>
+                  <span className="seal-sub">Certificación</span>
+                </span>
+              </a>
+
+              <div className="seal-item seal-item--static" data-testid="schema-seal-protocolo">
+                <span className="seal-frame seal-frame--mono">
+                  <ProtocolMark size={42} tone="gold" title="Protocolo DBT-ST exclusivo" />
+                </span>
+                <span className="seal-text">
+                  <span className="seal-title dbt-serif">Protocolo DBT-ST</span>
+                  <span className="seal-sub">Exclusivo · desarrollo propio</span>
+                </span>
               </div>
             </div>
           </div>
