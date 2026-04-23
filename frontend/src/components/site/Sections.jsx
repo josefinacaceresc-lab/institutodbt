@@ -147,10 +147,40 @@ export function SchemaSection() {
               ofreciendo una comprensión más profunda de los patrones de
               sufrimiento y mayor eficacia terapéutica.
             </p>
-            <div className="badge-row" data-testid="schema-badges">
-              <span className="badge-navy">Certificación ISST</span>
-              <span className="badge-navy">Certificación WDBTA</span>
-              <span className="badge-navy">Protocolo Exclusivo</span>
+            <div className="cert-row" data-testid="schema-badges">
+              <a
+                href="https://schematherapysociety.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cert-chip"
+                data-testid="cert-isst"
+              >
+                <img src="/logos/isst.jpg" alt="ISST — International Society of Schema Therapy" />
+                <div>
+                  <span className="cert-chip-label">Certificación</span>
+                  <span className="cert-chip-name">ISST</span>
+                </div>
+              </a>
+              <a
+                href="https://www.wdbta.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cert-chip"
+                data-testid="cert-wdbta"
+              >
+                <img src="/logos/wdbta.png" alt="WDBTA — World Dialectical Behavior Therapy Association" />
+                <div>
+                  <span className="cert-chip-label">Miembro institucional</span>
+                  <span className="cert-chip-name">WDBTA</span>
+                </div>
+              </a>
+              <div className="cert-chip cert-chip--static" data-testid="cert-protocolo">
+                <div className="cert-chip-mark">★</div>
+                <div>
+                  <span className="cert-chip-label">Protocolo</span>
+                  <span className="cert-chip-name">Exclusivo</span>
+                </div>
+              </div>
             </div>
           </div>
           <div className="schema-card fade-up" data-testid="schema-card">

@@ -3,6 +3,7 @@ import "@/App.css";
 import { Toaster } from "sonner";
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
+import Credentials from "@/components/site/Credentials";
 import {
   PillarsSection,
   ProgramsSection,
@@ -65,6 +66,7 @@ function App() {
       <Navbar />
       <main>
         <Hero />
+        <Credentials />
         <PillarsSection />
         <ProgramsSection />
         <ModulesSection />
