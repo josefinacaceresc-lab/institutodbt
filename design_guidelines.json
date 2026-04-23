@@ -1,92 +1,126 @@
 {
-  "theme": "Editorial Luxury / Jewel & Luxury",
-  "palette": {
+  "project_info": {
+    "domain": "Health/Wellness - Luxury Editorial",
+    "theme": "Light",
+    "archetype": "5 (Jewel & Luxury)",
+    "aesthetic": "Cartier / Aman / Bulgari editorial style. High-contrast, sharp, elegant, no rounded corners."
+  },
+  "color_system": {
     "navy": "#0E2333",
     "gold": "#BFA06A",
     "gold_2": "#D4B98A",
     "cream": "#F5F1EA",
     "cream_2": "#EDE7DB",
     "white": "#FFFFFF",
-    "ink": "#1C1C1C",
     "ink_3": "#6B6B6B",
-    "border": "#CEC5B2"
+    "border": "#CEC5B2",
+    "rules": {
+      "backgrounds": "Alternate between cream and white to separate tiers.",
+      "borders": "1px solid #CEC5B2 (border) or #BFA06A (gold). NEVER use shadows for structure.",
+      "text": "#0E2333 for headings and primary text, #6B6B6B for secondary text/bios."
+    }
   },
   "typography": {
-    "headings": "DM Serif Display, serif",
-    "body": "DM Sans, sans-serif"
+    "headings": {
+      "font": "DM Serif Display",
+      "style": "Normal, with strategic italicized accents wrapped in a span with gold color."
+    },
+    "body": {
+      "font": "DM Sans",
+      "weights": [300, 400, 500, 600]
+    },
+    "micro_labels": {
+      "font": "DM Sans",
+      "size": "9.5px",
+      "transform": "uppercase",
+      "letter_spacing": "0.22em",
+      "color": "#BFA06A"
+    }
   },
-  "aesthetic_rules": {
-    "border_radius": "0px strictly (sharp corners everywhere, no exceptions)",
-    "shadows": "None. Rely on pure flat contrasts and 1px borders.",
-    "spacing": "Generous negative space. Use p-12 to p-24 for section paddings.",
-    "accents": "Thin 1px lines in gold (#BFA06A) or border (#CEC5B2) for structural elegance."
+  "geometry": {
+    "corners": "0px (Sharp). ABSOLUTELY NO ROUNDED CORNERS anywhere.",
+    "shadows": "None on idle. Soft elegant shadow only on hover for cards.",
+    "spacing": "Hyper-generous. Use p-12, p-16, gap-12 to let elements breathe."
   },
-  "logo_treatment_strategy": {
-    "problem": "WDBTA and ISST logos are colorful and clash with the strict Navy/Gold palette.",
-    "solution": "The 'Passepartout' Museum Framing technique. Never place the raw logos directly on colored backgrounds. Wrap them in spacious white blocks with a delicate 1px border. Apply a partial desaturation filter that transitions to full color upon hover, treating them as interactive high-end artifacts."
+  "layout_strategy": {
+    "container": "Max-width wrapper, standard centered padding.",
+    "hierarchy": "Three distinct structural layers separated by 1px rules or background color shifts."
   },
-  "sections_to_update": {
-    "Credentials_jsx": {
-      "purpose": "A hero-grade, standalone editorial moment anchoring the clinic's global credibility.",
-      "layout_blueprint": {
-        "wrapper": "bg-[#0E2333] text-[#F5F1EA] py-24 px-6 md:px-12 lg:px-24",
-        "grid": "grid grid-cols-1 lg:grid-cols-12 gap-16 items-center max-w-[1400px] mx-auto",
-        "left_column": {
-          "span": "col-span-1 lg:col-span-5",
-          "components": [
-            "Micro-label: `<div className=\"flex items-center gap-4 text-[9.5px] uppercase tracking-[0.24em] text-[#BFA06A]\"><span className=\"w-7 h-[1px] bg-[#BFA06A]\"></span>Acreditaciones Globales</div>`",
-            "Heading: `<h2 className=\"font-serif text-4xl lg:text-5xl lg:leading-[1.1] mt-6 mb-8 text-white\">La máxima distinción clínica en Chile.</h2>`",
-            "Body: `<p className=\"font-sans font-light text-lg text-[#EDE7DB] leading-relaxed\">Somos la única institución en el país acreditada como miembro institucional de la WDBTA y certificada por la ISST.</p>`"
-          ]
-        },
-        "right_column": {
-          "span": "col-span-1 lg:col-span-7 relative",
-          "composition": "Asymmetrical staggered layout. Two framed plaques.",
-          "plaque_wdbta": {
-            "wrapper": "bg-white p-10 lg:p-12 border border-[#BFA06A] w-full max-w-sm ml-auto relative z-10",
-            "image": "src='/logos/wdbta.png' className='w-full h-auto max-w-[160px] mx-auto filter saturate-[0.2] hover:saturate-100 transition-all duration-700 ease-out mix-blend-multiply'",
-            "caption": "text-center mt-8 pt-6 border-t border-[#CEC5B2]/40 font-serif text-[#0E2333] text-lg",
-            "sub_caption": "uppercase tracking-widest text-[9px] font-sans text-[#6B6B6B] mt-2 block"
-          },
-          "plaque_isst": {
-            "wrapper": "bg-white p-10 lg:p-12 border border-[#BFA06A] w-full max-w-sm mr-auto -mt-12 lg:-mt-24 lg:-ml-12 relative z-20",
-            "image": "src='/logos/isst.jpg' className='w-full h-auto max-w-[160px] mx-auto filter saturate-[0.2] hover:saturate-100 transition-all duration-700 ease-out mix-blend-multiply'",
-            "caption": "text-center mt-8 pt-6 border-t border-[#CEC5B2]/40 font-serif text-[#0E2333] text-lg",
-            "sub_caption": "uppercase tracking-widest text-[9px] font-sans text-[#6B6B6B] mt-2 block"
-          }
+  "component_blueprints": {
+    "section_header": {
+      "eyebrow": "Micro-label format with gold em-dash prefix: '— QUIÉNES SOMOS'",
+      "heading": "DM Serif Display, massive (text-5xl or 6xl), navy. 'Las personas que te acompañan'",
+      "subheading": "DM Sans, text-lg, ink-3, max-w-2xl. 'Psiquiatras, psicólogos y profesionales...'",
+      "spacing": "mb-20"
+    },
+    "direccion_tier": {
+      "description": "2 leaders with hero-grade editorial treatment.",
+      "layout": "12-column CSS Grid. Josefina takes col-span-7, Trahice takes col-span-5. Trahice is vertically staggered down via margin-top (mt-12 or mt-24) to break symmetry.",
+      "card_anatomy": {
+        "visual_box": "A tall portrait ratio (e.g., aspect-[3/4]) box. Bg-navy. If no photo, display massive gold initials (DM Serif) in the center.",
+        "content_box": "White background, p-8 or p-10, 1px border. Visually overlaps the bottom-right corner of the visual_box by pulling it up and left using negative margins (-mt-20 -ml-12 on desktop) and relative z-10 positioning.",
+        "typography": {
+          "name": "DM Serif Display, text-3xl or 4xl, navy.",
+          "role": "Micro-label, gold, below name.",
+          "bio": "DM Sans, text-sm, ink-3, leading-relaxed, mt-4.",
+          "credentials": "List format, mt-4, space-y-2. text-xs, ink-3. Each item prefixed with a gold em-dash '—'.",
+          "tags": "Positioned at the bottom edge. Styled as editorial hallmarks (not pills). text-[9px] uppercase tracking-widest text-navy, separated by small gold dots '·'."
         }
       }
     },
-    "Sections_jsx_Schema": {
-      "purpose": "Refine the small accreditation chips to feel like premium editorial seals next to the content.",
-      "layout_blueprint": {
-        "wrapper_replacement": "Remove `.cert-chip` SaaS styling. Use a vertical 'Editorial Seal' stack.",
-        "container": "flex flex-col sm:flex-row gap-8 mt-10 pt-8 border-t border-[#CEC5B2]",
-        "seal_item": {
-          "layout": "flex items-center gap-6 group cursor-default",
-          "image_wrapper": "w-16 h-16 shrink-0 border border-[#BFA06A] bg-white p-3 flex items-center justify-center",
-          "image": "w-full h-full object-contain filter grayscale contrast-125 opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700",
-          "text_container": "flex flex-col",
-          "title": "font-serif text-[#0E2333] text-xl",
-          "subtitle": "font-sans uppercase text-[10px] tracking-[0.2em] text-[#BFA06A] mt-1"
-        }
+    "equipo_tier": {
+      "description": "8 team members in a refined grid.",
+      "layout": "Grid: 1 col (mobile), 2 cols (tablet), 4 cols (desktop). gap-6 or gap-8.",
+      "card_anatomy": {
+        "container": "White background, p-6, 1px border. Flex column, group.",
+        "initials_block": "58x58 navy square, gold DM Serif initials.",
+        "typography": {
+          "name": "DM Serif Display, text-xl, navy, mt-6.",
+          "role": "Micro-label, gold, mt-2.",
+          "bio": "DM Sans, text-xs, ink-3, leading-relaxed, mt-4, border-t border-border/50 pt-4.",
+          "tags": "Editorial hallmark style, text-[9px] uppercase tracking-widest text-navy separated by '·', mt-4."
+        },
+        "hover_state": "Slight upward translation (-translate-y-1) and delicate shadow (shadow-[0_8px_30px_rgb(0,0,0,0.04)]). Transition duration-500 ease-out."
       }
+    },
+    "certifications_strip": {
+      "description": "Museum-plaque style typographic strip instead of standard logos.",
+      "layout": "Flex container, justify-between items-center, flex-wrap, gap-8, py-16, border-y border-border/50.",
+      "item_anatomy": {
+        "container": "Flex flex-col items-center text-center space-y-2",
+        "acronym": "DM Serif Display, text-2xl or 3xl, navy, italic variant allowed.",
+        "divider": "w-6 h-[1px] bg-gold",
+        "full_name": "DM Sans, text-[9px] uppercase tracking-[0.2em] text-ink-3 max-w-[150px]"
+      }
+    },
+    "footer_update": {
+      "description": "Integrate the 5 affiliations cleanly above the copyright.",
+      "layout": "Add a pre-footer row. 1px gold/border divider above it. Render the certifications identically to the strip above, but scaled down 20% to fit neatly without bloating."
     }
   },
-  "testing": {
-    "data_testids": {
-      "credentials_section": "credentials-hero-section",
-      "wdbta_plaque": "plaque-wdbta-logo",
-      "isst_plaque": "plaque-isst-logo",
-      "schema_wdbta_seal": "schema-seal-wdbta",
-      "schema_isst_seal": "schema-seal-isst"
+  "surprise_and_delight_moments": [
+    {
+      "name": "Asymmetrical Overlap (Dirección)",
+      "description": "Instead of standard stacking, the biography text box physically overlaps the portrait frame by intersecting its corner, evoking a high-end printed magazine layout."
+    },
+    {
+      "name": "Museum Plaque Certifications",
+      "description": "Ditching messy logos (especially since APA, SEETP, Zepp lack them here) in favor of a stark, ultra-minimalist typographic lockup (Large Serif Acronym + gold line + micro-tracking full name) makes the institute look like an Ivy League research center."
     }
+  ],
+  "data_testid_conventions": {
+    "section": "equipo-section",
+    "direccion_card": "direccion-card-{initials}",
+    "equipo_card": "equipo-card-{initials}",
+    "certifications_strip": "certifications-strip",
+    "footer_certifications": "footer-certifications"
   },
   "instructions_to_main_agent": [
-    "1. Completely rewrite the Credentials.jsx component using the blueprint above. Abandon the simple 2-col grid. Use the asymmetrical split layout with a navy background and gold borders.",
-    "2. In Sections.jsx (SchemaSection), locate the '.cert-row' and '.cert-chip' elements and replace them with the 'Editorial Seal' blueprint defined here.",
-    "3. Do not add border-radius to anything.",
-    "4. Use CSS filters as defined (`saturate-[0.2]` or `grayscale`) to mute the logos initially, allowing them to bloom into full color on hover. This resolves the color clash while retaining brand recognition.",
-    "5. Ensure strict adherence to the existing typographic classes (DM Serif Display for serif, DM Sans for sans)."
+    "Do NOT use markdown to wrap code. You are directly modifying React/JS components.",
+    "Update /app/frontend/src/data/site.js to include all new team members categorized as 'direccion' and 'clinico'. Add an array for 'certifications'.",
+    "Rewrite Sections2.jsx to implement this 3-tier hierarchy.",
+    "Update Footer.jsx to include the certifications strip.",
+    "Ensure all CSS classes use Tailwind. Any custom micro-CSS goes to App.css if necessary, but Tailwind is preferred.",
+    "Stick rigidly to the 0px border-radius rule. Everything must be a sharp rectangle."
   ]
 }
