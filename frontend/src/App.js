@@ -18,6 +18,7 @@ import {
 } from "@/components/site/Sections2";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
+import WDBTAConference from "@/components/site/WDBTAConference";
 
 function useFadeUp() {
   useEffect(() => {
@@ -73,6 +74,7 @@ function App() {
         <SchemaSection />
         <ResearchSection />
         <PublicationsSection />
+        <WDBTAConference />
         <TeamSection />
         <TestimonialsSection />
         <Contact />
