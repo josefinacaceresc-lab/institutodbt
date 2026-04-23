@@ -1,126 +1,45 @@
 {
-  "project_info": {
-    "domain": "Health/Wellness - Luxury Editorial",
-    "theme": "Light",
-    "archetype": "5 (Jewel & Luxury)",
-    "aesthetic": "Cartier / Aman / Bulgari editorial style. High-contrast, sharp, elegant, no rounded corners."
+  "chosen_treatment": "Option B/D Hybrid: The 'Editorial Dispatch' Parallax. The image is used as a full-width background layer, treated with a heavy translucent navy overlay and monochrome filter. This honors the user's request ('ojala traslucida, es decir de fondo') while preventing the photo's original colors from clashing with the luxury palette. An offset, solid cream 'Museum Plaque' card floats over this backdrop, creating a magazine-like layout that feels highly prestigious.",
+  "layout_blueprint": {
+    "section": "relative w-full py-32 md:py-48 overflow-hidden bg-[#0E2333]",
+    "container": "relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 items-center",
+    "card_placement": "md:col-start-7 md:col-span-6 lg:col-start-8 lg:col-span-5 bg-[#F5F1EA] p-10 md:p-14 shadow-2xl relative",
+    "typography_scale": {
+      "surtitle": "text-xs md:text-sm text-[#BFA06A] tracking-[0.2em] uppercase font-sans mb-4 block",
+      "heading": "text-4xl md:text-5xl lg:text-6xl text-[#0E2333] font-serif leading-none mb-6",
+      "body": "text-base md:text-lg text-[#0E2333]/80 font-sans leading-relaxed mb-8",
+      "location_tag": "inline-flex items-center gap-3 text-sm font-sans text-[#0E2333] uppercase tracking-widest border-t border-[#BFA06A]/30 pt-6 mt-2 w-full"
+    },
+    "corners": "Zero border-radius (sharp corners, rounded-none) on all elements, specifically the cream card.",
+    "responsive_behavior": "On mobile, the background image height is determined by the content padding. The card takes up full width minus standard margins. On desktop, the card is offset to the right to reveal the left side of the background photo where the group's focal point likely is."
   },
-  "color_system": {
-    "navy": "#0E2333",
-    "gold": "#BFA06A",
-    "gold_2": "#D4B98A",
-    "cream": "#F5F1EA",
-    "cream_2": "#EDE7DB",
-    "white": "#FFFFFF",
-    "ink_3": "#6B6B6B",
-    "border": "#CEC5B2",
-    "rules": {
-      "backgrounds": "Alternate between cream and white to separate tiers.",
-      "borders": "1px solid #CEC5B2 (border) or #BFA06A (gold). NEVER use shadows for structure.",
-      "text": "#0E2333 for headings and primary text, #6B6B6B for secondary text/bios."
+  "image_treatment": {
+    "css_classes": "absolute inset-0 w-full h-full object-cover object-center",
+    "filters": "grayscale contrast-125",
+    "blend_mode": "mix-blend-luminosity opacity-40",
+    "overlay": "An absolute inset-0 layer over the image with bg-[#0E2333]/85 (or bg-gradient-to-r from-[#0E2333]/95 via-[#0E2333]/80 to-[#0E2333]/90) to ensure the image acts as a subtle texture rather than competing with the text."
+  },
+  "position_in_flow": "Insert as `<WDBTAConferenceSection />` immediately BEFORE the TeamSection. Flow: ... -> white -> NAVY (This Section) -> cream (Team Section).",
+  "surprise_element": "A delicate, absolute-positioned gold hairline (w-[1px] bg-[#BFA06A]) that starts from the very top of the section and runs vertically down the left side (left-8 or left-16 on desktop), acting as a physical 'wire' that anchors the design. The cream card also has a subtle negative top margin or transform (-translate-y-8) to break perfect vertical symmetry.",
+  "copy": {
+    "surtitle": "CUMBRE GLOBAL · SEPTIEMBRE 2023",
+    "title": "Capítulo de Investigación WDBTA",
+    "body": "La Dra. Josefina Cáceres Cortés, única representante de Chile, junto a la élite investigadora mundial en el histórico recinto modernista del Hospital de la Santa Creu i Sant Pau.",
+    "location": "UAB · Barcelona, España"
+  },
+  "media_urls": {
+    "wdbta_conference_photo": {
+      "url": "https://customer-assets.emergentagent.com/job_landing-hub-175/artifacts/dj2s9adj_1697991434321%20%281%29.jpeg",
+      "description": "Group photo from the WDBTA annual conference at UAB/Hospital Sant Pau. Use as the absolute background image for the new WDBTAConferenceSection.",
+      "category": "background"
     }
   },
-  "typography": {
-    "headings": {
-      "font": "DM Serif Display",
-      "style": "Normal, with strategic italicized accents wrapped in a span with gold color."
-    },
-    "body": {
-      "font": "DM Sans",
-      "weights": [300, 400, 500, 600]
-    },
-    "micro_labels": {
-      "font": "DM Sans",
-      "size": "9.5px",
-      "transform": "uppercase",
-      "letter_spacing": "0.22em",
-      "color": "#BFA06A"
-    }
+  "data_testids": {
+    "section": "wdbta-conference-section",
+    "background_image": "wdbta-conference-bg",
+    "content_card": "wdbta-conference-card",
+    "heading": "wdbta-conference-title",
+    "location_tag": "wdbta-conference-location"
   },
-  "geometry": {
-    "corners": "0px (Sharp). ABSOLUTELY NO ROUNDED CORNERS anywhere.",
-    "shadows": "None on idle. Soft elegant shadow only on hover for cards.",
-    "spacing": "Hyper-generous. Use p-12, p-16, gap-12 to let elements breathe."
-  },
-  "layout_strategy": {
-    "container": "Max-width wrapper, standard centered padding.",
-    "hierarchy": "Three distinct structural layers separated by 1px rules or background color shifts."
-  },
-  "component_blueprints": {
-    "section_header": {
-      "eyebrow": "Micro-label format with gold em-dash prefix: '— QUIÉNES SOMOS'",
-      "heading": "DM Serif Display, massive (text-5xl or 6xl), navy. 'Las personas que te acompañan'",
-      "subheading": "DM Sans, text-lg, ink-3, max-w-2xl. 'Psiquiatras, psicólogos y profesionales...'",
-      "spacing": "mb-20"
-    },
-    "direccion_tier": {
-      "description": "2 leaders with hero-grade editorial treatment.",
-      "layout": "12-column CSS Grid. Josefina takes col-span-7, Trahice takes col-span-5. Trahice is vertically staggered down via margin-top (mt-12 or mt-24) to break symmetry.",
-      "card_anatomy": {
-        "visual_box": "A tall portrait ratio (e.g., aspect-[3/4]) box. Bg-navy. If no photo, display massive gold initials (DM Serif) in the center.",
-        "content_box": "White background, p-8 or p-10, 1px border. Visually overlaps the bottom-right corner of the visual_box by pulling it up and left using negative margins (-mt-20 -ml-12 on desktop) and relative z-10 positioning.",
-        "typography": {
-          "name": "DM Serif Display, text-3xl or 4xl, navy.",
-          "role": "Micro-label, gold, below name.",
-          "bio": "DM Sans, text-sm, ink-3, leading-relaxed, mt-4.",
-          "credentials": "List format, mt-4, space-y-2. text-xs, ink-3. Each item prefixed with a gold em-dash '—'.",
-          "tags": "Positioned at the bottom edge. Styled as editorial hallmarks (not pills). text-[9px] uppercase tracking-widest text-navy, separated by small gold dots '·'."
-        }
-      }
-    },
-    "equipo_tier": {
-      "description": "8 team members in a refined grid.",
-      "layout": "Grid: 1 col (mobile), 2 cols (tablet), 4 cols (desktop). gap-6 or gap-8.",
-      "card_anatomy": {
-        "container": "White background, p-6, 1px border. Flex column, group.",
-        "initials_block": "58x58 navy square, gold DM Serif initials.",
-        "typography": {
-          "name": "DM Serif Display, text-xl, navy, mt-6.",
-          "role": "Micro-label, gold, mt-2.",
-          "bio": "DM Sans, text-xs, ink-3, leading-relaxed, mt-4, border-t border-border/50 pt-4.",
-          "tags": "Editorial hallmark style, text-[9px] uppercase tracking-widest text-navy separated by '·', mt-4."
-        },
-        "hover_state": "Slight upward translation (-translate-y-1) and delicate shadow (shadow-[0_8px_30px_rgb(0,0,0,0.04)]). Transition duration-500 ease-out."
-      }
-    },
-    "certifications_strip": {
-      "description": "Museum-plaque style typographic strip instead of standard logos.",
-      "layout": "Flex container, justify-between items-center, flex-wrap, gap-8, py-16, border-y border-border/50.",
-      "item_anatomy": {
-        "container": "Flex flex-col items-center text-center space-y-2",
-        "acronym": "DM Serif Display, text-2xl or 3xl, navy, italic variant allowed.",
-        "divider": "w-6 h-[1px] bg-gold",
-        "full_name": "DM Sans, text-[9px] uppercase tracking-[0.2em] text-ink-3 max-w-[150px]"
-      }
-    },
-    "footer_update": {
-      "description": "Integrate the 5 affiliations cleanly above the copyright.",
-      "layout": "Add a pre-footer row. 1px gold/border divider above it. Render the certifications identically to the strip above, but scaled down 20% to fit neatly without bloating."
-    }
-  },
-  "surprise_and_delight_moments": [
-    {
-      "name": "Asymmetrical Overlap (Dirección)",
-      "description": "Instead of standard stacking, the biography text box physically overlaps the portrait frame by intersecting its corner, evoking a high-end printed magazine layout."
-    },
-    {
-      "name": "Museum Plaque Certifications",
-      "description": "Ditching messy logos (especially since APA, SEETP, Zepp lack them here) in favor of a stark, ultra-minimalist typographic lockup (Large Serif Acronym + gold line + micro-tracking full name) makes the institute look like an Ivy League research center."
-    }
-  ],
-  "data_testid_conventions": {
-    "section": "equipo-section",
-    "direccion_card": "direccion-card-{initials}",
-    "equipo_card": "equipo-card-{initials}",
-    "certifications_strip": "certifications-strip",
-    "footer_certifications": "footer-certifications"
-  },
-  "instructions_to_main_agent": [
-    "Do NOT use markdown to wrap code. You are directly modifying React/JS components.",
-    "Update /app/frontend/src/data/site.js to include all new team members categorized as 'direccion' and 'clinico'. Add an array for 'certifications'.",
-    "Rewrite Sections2.jsx to implement this 3-tier hierarchy.",
-    "Update Footer.jsx to include the certifications strip.",
-    "Ensure all CSS classes use Tailwind. Any custom micro-CSS goes to App.css if necessary, but Tailwind is preferred.",
-    "Stick rigidly to the 0px border-radius rule. Everything must be a sharp rectangle."
-  ]
+  "instructions_to_main_agent": "1. Create a new component file for WDBTAConferenceSection. 2. Implement the layout strictly using the provided layout_blueprint and image_treatment. 3. Ensure the background image is layered beneath a heavy navy overlay so it appears translucent and moody, matching the user's request. 4. Build the solid cream 'Museum Plaque' card to overlap the background, keeping borders sharp (rounded-none). 5. Incorporate the vertical gold hairline as the 'surprise' editorial element. 6. Integrate this section into the main App flow just before the Team section. 7. Do not use any emojis. Apply data-testids to all requested elements."
 }
