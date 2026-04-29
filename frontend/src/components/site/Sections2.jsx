@@ -130,7 +130,7 @@ export function TeamSection() {
           </h2>
           <p className="team-sub">
             Psiquiatras, psicólogos y profesionales de salud dedicados a
-            terapias basadas en evidencia. Liderado por la única Ph.D. con
+            terapias basadas en evidencia. Liderado por la única Ph.D.(c) con
             afiliación WDBTA activa en Chile.
           </p>
         </div>

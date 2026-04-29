@@ -23,7 +23,7 @@ export default function WDBTAConference() {
             <div className="wdbta-figure-frame">
               <img
                 src="/media/wdbta-barcelona-2023.jpeg"
-                alt="Capítulo de Investigación WDBTA en el Hospital de la Santa Creu i Sant Pau, Barcelona — Dra. Josefina Cáceres Cortés junto a la élite investigadora mundial."
+                alt="Capítulo de Investigación WDBTA en el Hospital de la Santa Creu i Sant Pau, Barcelona — Dra.(c) Josefina Cáceres Cortés junto a la élite investigadora mundial."
                 loading="lazy"
                 data-testid="wdbta-conference-photo"
               />
@@ -54,7 +54,7 @@ export default function WDBTAConference() {
             </h2>
 
             <p className="wdbta-copy-body">
-              La <strong>Dra. Josefina Cáceres Cortés</strong> — única
+              La <strong>Dra.(c) Josefina Cáceres Cortés</strong> — única
               representante de Chile — junto a la élite investigadora mundial
               de WDBTA en el histórico recinto modernista del{" "}
               <strong>Hospital de la Santa Creu, Sant Pau</strong>.

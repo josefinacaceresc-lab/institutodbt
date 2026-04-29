@@ -15,7 +15,7 @@ export default function Hero() {
 
         <p className="hero-sub">
           Dirigido por la{" "}
-          <strong>Dra. Josefina Cáceres Cortés, Ph.D.</strong> — el centro
+          <strong>Dra.(c) Josefina Cáceres Cortés, Ph.D.(c)</strong> — el centro
           de salud mental más avanzado de Chile. Combinamos el tratamiento
           DBT de mayor evidencia científica con Schema Therapy y tecnología
           clínica propia, bajo el único sello institucional{" "}

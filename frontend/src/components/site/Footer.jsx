@@ -56,7 +56,7 @@ export default function Footer() {
           </nav>
 
           <div className="footer-copy">
-            © {year} {SITE.brandName} · Josefina Cáceres Cortés, Ph.D. · Todos los derechos reservados.
+            © {year} {SITE.brandName} · Josefina Cáceres Cortés, Ph.D.(c) · Todos los derechos reservados.
           </div>
         </div>
       </footer>

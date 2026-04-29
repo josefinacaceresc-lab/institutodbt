@@ -38,8 +38,8 @@ export const PILLARS = [
   },
   {
     icon: "microscope",
-    title: "Dirección Ph.D.",
-    text: "Dirigido por la Dra. Josefina Cáceres Cortés, con formación doctoral y publicaciones científicas.",
+    title: "Dirección Ph.D.(c)",
+    text: "Dirigido por la Dra.(c) Josefina Cáceres Cortés, con formación doctoral en curso y publicaciones científicas.",
   },
   {
     icon: "cpu",
@@ -166,9 +166,9 @@ export const PUBLICATIONS = [
 export const TEAM = [
   [
     "JCC",
-    "Josefina Cáceres Cortés, Ph.D.",
+    "Josefina Cáceres Cortés, Ph.D.(c)",
     "Directora Científica y Fundadora",
-    "Psicóloga, Ph.D. Pionera DBT Chile. Miembro WDBTA, certificación ISST. Directora científica del proyecto LaKaira AI.",
+    "Psicóloga, Ph.D.(c) Pionera DBT Chile. Miembro WDBTA, certificación ISST. Directora científica del proyecto LaKaira AI.",
   ],
   [
     "TV",
@@ -205,16 +205,16 @@ export const TEAM = [
 export const DIRECCION = [
   {
     initials: "JCC",
-    name: "Josefina Cáceres Cortés, Ph.D.",
+    name: "Josefina Cáceres Cortés, Ph.D.(c)",
     role: "Directora Científica & Fundadora",
     bio: "Psicóloga clínica y directora del Instituto DBT Chile. Única representante en Chile dentro del capítulo de investigación de la WDBTA. Formada y afiliada en terapia de esquemas, ISST. Su enfoque integra los aportes de Linehan, Bohus, Damasio, Porges, Siegel y Yi-Yuan Tang.",
     credentials: [
-      "Ph.D. — Formación doctoral",
+      "Ph.D.(c) — Formación doctoral en curso",
       "WDBTA Research Member — única en Chile",
       "Certificación ISST — Schema Therapy",
       "Fundadora NexariaLabs · LaKaira AI",
     ],
-    tags: ["WDBTA", "ISST", "APA", "Ph.D."],
+    tags: ["WDBTA", "ISST", "APA", "Ph.D.(c)"],
   },
   {
     initials: "TV",

@@ -42,7 +42,7 @@ export default function Credentials() {
               </div>
               <div>
                 <dt>Dirección</dt>
-                <dd>Ph.D. clínica</dd>
+                <dd>Ph.D.(c) clínica</dd>
               </div>
             </dl>
           </div>
