@@ -1,10 +1,14 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Header, UploadFile, File, Form, Depends
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import asyncio
 import logging
+import secrets
+import time
+import re
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
@@ -23,6 +27,19 @@ db = client[os.environ['DB_NAME']]
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '').strip()
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev').strip()
 NOTIFICATION_EMAIL = os.environ.get('NOTIFICATION_EMAIL', 'contacto@dbtchile.cl').strip()
+
+# Admin
+ADMIN_PIN = os.environ.get('ADMIN_PIN', '240875').strip()
+
+# Uploads
+UPLOAD_DIR = ROOT_DIR / 'uploads'
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+ALLOWED_IMAGE_EXT = {'.jpg', '.jpeg', '.png', '.webp', '.gif'}
+MAX_IMAGE_BYTES = 8 * 1024 * 1024  # 8 MB
+
+# In-memory session store (token -> expiry timestamp)
+_admin_sessions: dict[str, float] = {}
+_SESSION_TTL_SEC = 60 * 60 * 24  # 24h
 
 try:
     import resend  # type: ignore
@@ -222,8 +239,190 @@ async def list_contact_leads(limit: int = 100):
     return out
 
 
+# ─── Foro · Article models ──────────────────────────────
+class ArticleBase(BaseModel):
+    title: str = Field(..., min_length=2, max_length=200)
+    author: str = Field(..., min_length=2, max_length=120)
+    summary: Optional[str] = Field(default=None, max_length=400)
+    content: str = Field(..., min_length=1, max_length=50000)
+    category: Optional[str] = Field(default=None, max_length=80)
+    cover_url: Optional[str] = Field(default=None, max_length=500)
+    article_date: Optional[str] = Field(default=None, max_length=40)
+
+
+class ArticleCreate(ArticleBase):
+    pass
+
+
+class Article(ArticleBase):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class AdminLoginRequest(BaseModel):
+    pin: str = Field(..., min_length=1, max_length=20)
+
+
+class AdminLoginResponse(BaseModel):
+    token: str
+    expires_in: int
+
+
+# ─── Admin auth helpers ──────────────────────────────
+def _purge_expired_sessions() -> None:
+    now = time.time()
+    expired = [t for t, exp in _admin_sessions.items() if exp < now]
+    for t in expired:
+        _admin_sessions.pop(t, None)
+
+
+def require_admin(authorization: str = Header(default="")) -> bool:
+    """Validates Bearer token from admin login."""
+    _purge_expired_sessions()
+    if not authorization or not authorization.lower().startswith("bearer "):
+        raise HTTPException(status_code=401, detail="No autorizado")
+    token = authorization.split(" ", 1)[1].strip()
+    exp = _admin_sessions.get(token)
+    if not exp or exp < time.time():
+        raise HTTPException(status_code=401, detail="Sesión expirada")
+    return True
+
+
+def _safe_filename(name: str) -> str:
+    base = Path(name).stem
+    ext = Path(name).suffix.lower()
+    base = re.sub(r'[^a-zA-Z0-9_-]', '-', base)[:60] or 'file'
+    return f"{base}-{uuid.uuid4().hex[:10]}{ext}"
+
+
+# ─── Admin & Foro routes ──────────────────────────────
+@api_router.post("/admin/login", response_model=AdminLoginResponse)
+async def admin_login(payload: AdminLoginRequest):
+    if not ADMIN_PIN:
+        raise HTTPException(status_code=503, detail="Admin no configurado")
+    if payload.pin.strip() != ADMIN_PIN:
+        # constant-time compare
+        if not secrets.compare_digest(payload.pin.strip(), ADMIN_PIN):
+            raise HTTPException(status_code=401, detail="PIN incorrecto")
+    _purge_expired_sessions()
+    token = secrets.token_urlsafe(28)
+    _admin_sessions[token] = time.time() + _SESSION_TTL_SEC
+    return AdminLoginResponse(token=token, expires_in=_SESSION_TTL_SEC)
+
+
+@api_router.post("/admin/logout")
+async def admin_logout(authorization: str = Header(default="")):
+    if authorization.lower().startswith("bearer "):
+        tok = authorization.split(" ", 1)[1].strip()
+        _admin_sessions.pop(tok, None)
+    return {"ok": True}
+
+
+@api_router.get("/admin/me")
+async def admin_me(_: bool = Depends(require_admin)):
+    return {"authenticated": True}
+
+
+@api_router.post("/admin/upload")
+async def admin_upload(
+    file: UploadFile = File(...),
+    _: bool = Depends(require_admin),
+):
+    ext = Path(file.filename or '').suffix.lower()
+    if ext not in ALLOWED_IMAGE_EXT:
+        raise HTTPException(status_code=400, detail="Formato no permitido. Usa JPG/PNG/WEBP/GIF.")
+    content = await file.read()
+    if len(content) > MAX_IMAGE_BYTES:
+        raise HTTPException(status_code=400, detail="Imagen demasiado grande (máx 8MB).")
+    filename = _safe_filename(file.filename or f"upload{ext}")
+    path = UPLOAD_DIR / filename
+    path.write_bytes(content)
+    url = f"/api/uploads/{filename}"
+    return {"url": url, "filename": filename, "size": len(content)}
+
+
+@api_router.get("/articles", response_model=List[Article])
+async def list_articles(limit: int = 50):
+    cursor = db.articles.find({}, {"_id": 0}).sort("created_at", -1).limit(max(1, min(limit, 200)))
+    rows = await cursor.to_list(length=limit)
+    out: List[Article] = []
+    for r in rows:
+        for k in ("created_at", "updated_at"):
+            if isinstance(r.get(k), str):
+                try:
+                    r[k] = datetime.fromisoformat(r[k])
+                except Exception:
+                    r[k] = datetime.now(timezone.utc)
+        out.append(Article(**r))
+    return out
+
+
+@api_router.get("/articles/{article_id}", response_model=Article)
+async def get_article(article_id: str):
+    row = await db.articles.find_one({"id": article_id}, {"_id": 0})
+    if not row:
+        raise HTTPException(status_code=404, detail="Artículo no encontrado")
+    for k in ("created_at", "updated_at"):
+        if isinstance(row.get(k), str):
+            try:
+                row[k] = datetime.fromisoformat(row[k])
+            except Exception:
+                row[k] = datetime.now(timezone.utc)
+    return Article(**row)
+
+
+@api_router.post("/articles", response_model=Article, status_code=201)
+async def create_article(payload: ArticleCreate, _: bool = Depends(require_admin)):
+    now = datetime.now(timezone.utc)
+    art_id = str(uuid.uuid4())
+    doc = payload.model_dump()
+    doc["id"] = art_id
+    doc["created_at"] = now.isoformat()
+    doc["updated_at"] = now.isoformat()
+    await db.articles.insert_one({**doc})
+    doc["created_at"] = now
+    doc["updated_at"] = now
+    return Article(**doc)
+
+
+@api_router.put("/articles/{article_id}", response_model=Article)
+async def update_article(
+    article_id: str,
+    payload: ArticleCreate,
+    _: bool = Depends(require_admin),
+):
+    existing = await db.articles.find_one({"id": article_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Artículo no encontrado")
+    now = datetime.now(timezone.utc)
+    update_doc = payload.model_dump()
+    update_doc["updated_at"] = now.isoformat()
+    await db.articles.update_one({"id": article_id}, {"$set": update_doc})
+    merged = {**existing, **update_doc, "id": article_id}
+    for k in ("created_at", "updated_at"):
+        if isinstance(merged.get(k), str):
+            try:
+                merged[k] = datetime.fromisoformat(merged[k])
+            except Exception:
+                merged[k] = datetime.now(timezone.utc)
+    return Article(**merged)
+
+
+@api_router.delete("/articles/{article_id}")
+async def delete_article(article_id: str, _: bool = Depends(require_admin)):
+    res = await db.articles.delete_one({"id": article_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Artículo no encontrado")
+    return {"ok": True}
+
+
 # Include the router in the main app
 app.include_router(api_router)
+
+# Mount uploads as static files at /api/uploads/*
+app.mount("/api/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,

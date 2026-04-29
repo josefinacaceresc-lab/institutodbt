@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import "@/App.css";
+import "@/styles/foro.css";
 import { Toaster } from "sonner";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
 import Credentials from "@/components/site/Credentials";
@@ -12,31 +15,41 @@ import {
 } from "@/components/site/Sections";
 import {
   ResearchSection,
-  PublicationsSection,
   TeamSection,
   TestimonialsSection,
 } from "@/components/site/Sections2";
+import ForoSection from "@/components/site/ForoSection";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
 import WDBTAConference from "@/components/site/WDBTAConference";
+import AdminPage from "@/pages/AdminPage";
 
 function useFadeUp() {
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
-    const els = document.querySelectorAll(".fade-up");
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
-            obs.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
+    const observe = () => {
+      const els = document.querySelectorAll(".fade-up:not(.is-visible)");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      );
+      els.forEach((el) => obs.observe(el));
+      return obs;
+    };
+    const obs = observe();
+    // Re-observe after a small delay (foro cards fetched async)
+    const t = setTimeout(observe, 1500);
+    return () => {
+      obs?.disconnect();
+      clearTimeout(t);
+    };
   }, []);
 }
 
@@ -58,7 +71,7 @@ function useSmoothScroll() {
   }, []);
 }
 
-function App() {
+function Landing() {
   useFadeUp();
   useSmoothScroll();
 
@@ -73,7 +86,7 @@ function App() {
         <ModulesSection />
         <SchemaSection />
         <ResearchSection />
-        <PublicationsSection />
+        <ForoSection />
         <WDBTAConference />
         <TeamSection />
         <TestimonialsSection />
@@ -94,6 +107,17 @@ function App() {
         }}
       />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="*" element={<Landing />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

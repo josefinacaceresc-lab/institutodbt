@@ -21,7 +21,7 @@ export const NAV_ITEMS = [
   { href: "#clinica", label: "Tratamiento" },
   { href: "#schema", label: "Schema" },
   { href: "#ciencia", label: "Investigación" },
-  { href: "#publicaciones", label: "Publicaciones" },
+  { href: "#foro", label: "Foro" },
   { href: "#equipo", label: "Equipo" },
 ];
 
