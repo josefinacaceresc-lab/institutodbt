@@ -50,9 +50,7 @@ export default function Credentials() {
           {/* RIGHT — Asymmetric plaques */}
           <div className="cred-plaques" aria-label="Logos de acreditación">
             <a
-              href="https://www.wdbta.org/"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#schema"
               className="cred-plaque cred-plaque--wdbta"
               data-testid="plaque-wdbta-logo"
               aria-label="World Dialectical Behavior Therapy Association — WDBTA"
@@ -79,9 +77,7 @@ export default function Credentials() {
             </a>
 
             <a
-              href="https://schematherapysociety.org/"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#schema"
               className="cred-plaque cred-plaque--isst"
               data-testid="plaque-isst-logo"
               aria-label="International Society of Schema Therapy — ISST"

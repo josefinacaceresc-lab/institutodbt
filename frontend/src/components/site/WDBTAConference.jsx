@@ -1,5 +1,3 @@
-import { MapPin, ArrowUpRight } from "lucide-react";
-
 export default function WDBTAConference() {
   return (
     <section
@@ -77,18 +75,6 @@ export default function WDBTAConference() {
                 <dd>1 · JCC</dd>
               </div>
             </div>
-
-            <a
-              href="https://www.wdbta.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="wdbta-copy-link"
-              data-testid="wdbta-conference-link"
-            >
-              <MapPin size={14} strokeWidth={1.8} />
-              <span>Conocer la WDBTA</span>
-              <ArrowUpRight size={14} strokeWidth={1.8} />
-            </a>
           </div>
         </div>
       </div>

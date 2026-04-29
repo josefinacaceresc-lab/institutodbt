@@ -149,11 +149,8 @@ export function SchemaSection() {
               sufrimiento y mayor eficacia terapéutica.
             </p>
             <div className="seal-row" data-testid="schema-badges">
-              <a
-                href="https://www.wdbta.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="seal-item"
+              <div
+                className="seal-item seal-item--static"
                 data-testid="schema-seal-wdbta"
                 aria-label="Miembro institucional WDBTA"
               >
@@ -164,13 +161,10 @@ export function SchemaSection() {
                   <span className="seal-title dbt-serif">WDBTA</span>
                   <span className="seal-sub">Miembro institucional</span>
                 </span>
-              </a>
+              </div>
 
-              <a
-                href="https://schematherapysociety.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="seal-item"
+              <div
+                className="seal-item seal-item--static"
                 data-testid="schema-seal-isst"
                 aria-label="Certificación ISST"
               >
@@ -181,7 +175,7 @@ export function SchemaSection() {
                   <span className="seal-title dbt-serif">ISST</span>
                   <span className="seal-sub">Certificación</span>
                 </span>
-              </a>
+              </div>
 
               <div className="seal-item seal-item--static" data-testid="schema-seal-protocolo">
                 <span className="seal-frame seal-frame--mono">
