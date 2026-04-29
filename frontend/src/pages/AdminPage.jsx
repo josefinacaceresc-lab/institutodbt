@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
-import { Trash2, Pencil, Plus, LogOut, Image as ImageIcon, ArrowLeft } from "lucide-react";
+import { Trash2, Pencil, Plus, LogOut, Image as ImageIcon, ArrowLeft, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -15,6 +15,8 @@ const EMPTY_FORM = {
   content: "",
   category: "",
   cover_url: "",
+  pdf_url: "",
+  pdf_name: "",
   article_date: "",
 };
 
@@ -34,7 +36,9 @@ export default function AdminPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
   const fileRef = useRef(null);
+  const pdfRef = useRef(null);
 
   const authHeaders = useCallback(
     () => ({ Authorization: `Bearer ${token}` }),
@@ -112,6 +116,8 @@ export default function AdminPage() {
       content: a.content || "",
       category: a.category || "",
       cover_url: a.cover_url || "",
+      pdf_url: a.pdf_url || "",
+      pdf_name: a.pdf_name || "",
       article_date: a.article_date || "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -141,6 +147,36 @@ export default function AdminPage() {
     }
   };
 
+  const onUploadPdf = async (file) => {
+    if (!file) return;
+    if (!/\.pdf$/i.test(file.name)) {
+      toast.error("Solo archivos PDF");
+      return;
+    }
+    setUploadingPdf(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await axios.post(`${API}/admin/upload`, fd, {
+        headers: {
+          ...authHeaders(),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setForm((f) => ({
+        ...f,
+        pdf_url: res.data.url,
+        pdf_name: res.data.original_name || file.name,
+      }));
+      toast.success("PDF subido");
+    } catch (err) {
+      toast.error(err?.response?.data?.detail || "No se pudo subir el PDF");
+    } finally {
+      setUploadingPdf(false);
+      if (pdfRef.current) pdfRef.current.value = "";
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (form.title.trim().length < 2) {
@@ -151,8 +187,8 @@ export default function AdminPage() {
       toast.error("Indica el autor");
       return;
     }
-    if (form.content.trim().length < 1) {
-      toast.error("El artículo necesita contenido");
+    if (!form.content.trim() && !form.pdf_url) {
+      toast.error("Agrega el contenido del artículo o sube un PDF");
       return;
     }
     setSaving(true);
@@ -163,6 +199,8 @@ export default function AdminPage() {
       content: form.content.trim(),
       category: form.category.trim() || null,
       cover_url: form.cover_url.trim() || null,
+      pdf_url: form.pdf_url.trim() || null,
+      pdf_name: form.pdf_name.trim() || null,
       article_date: form.article_date.trim() || null,
     };
     try {
@@ -330,8 +368,62 @@ export default function AdminPage() {
                 )}
               </div>
               <div className="admin-field">
-                <label htmlFor="af-content" className="admin-label">Contenido *</label>
-                <textarea id="af-content" name="content" className="admin-textarea admin-textarea-tall" rows={14} value={form.content} onChange={onChange} required placeholder="Escribe tu artículo. Doble salto de línea = nuevo párrafo." data-testid="admin-input-content" />
+                <label className="admin-label">Artículo PDF (opcional)</label>
+                {form.pdf_url ? (
+                  <div className="admin-pdf-preview" data-testid="admin-pdf-preview">
+                    <FileText size={20} strokeWidth={1.5} />
+                    <div className="admin-pdf-meta">
+                      <a
+                        href={buildSrc(form.pdf_url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="admin-pdf-name"
+                      >
+                        {form.pdf_name || "documento.pdf"}
+                      </a>
+                      <span className="admin-pdf-hint">Adjunto · click para previsualizar</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="admin-cover-remove"
+                      onClick={() => setForm((f) => ({ ...f, pdf_url: "", pdf_name: "" }))}
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                ) : (
+                  <label className="admin-upload" data-testid="admin-pdf-upload-label">
+                    <FileText size={18} strokeWidth={1.5} />
+                    <span>{uploadingPdf ? "Subiendo PDF…" : "Subir artículo en PDF (máx 25MB)"}</span>
+                    <input
+                      ref={pdfRef}
+                      type="file"
+                      accept="application/pdf,.pdf"
+                      onChange={(e) => onUploadPdf(e.target.files?.[0])}
+                      hidden
+                      data-testid="admin-pdf-upload-input"
+                    />
+                  </label>
+                )}
+              </div>
+              <div className="admin-field">
+                <label htmlFor="af-content" className="admin-label">
+                  Contenido {form.pdf_url ? "(opcional con PDF)" : "*"}
+                </label>
+                <textarea
+                  id="af-content"
+                  name="content"
+                  className="admin-textarea admin-textarea-tall"
+                  rows={14}
+                  value={form.content}
+                  onChange={onChange}
+                  placeholder={
+                    form.pdf_url
+                      ? "Si ya subiste el PDF, puedes dejar vacío o escribir un resumen / intro corto."
+                      : "Escribe tu artículo. Doble salto de línea = nuevo párrafo."
+                  }
+                  data-testid="admin-input-content"
+                />
               </div>
               <div className="admin-form-actions">
                 {form.id && (

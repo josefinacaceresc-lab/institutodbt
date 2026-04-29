@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowUpRight, Calendar } from "lucide-react";
+import { ArrowUpRight, Calendar, FileText, Download } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -135,6 +135,11 @@ export default function ForoSection() {
                   {a.category && (
                     <span className="foro-card-cat">{a.category}</span>
                   )}
+                  {a.pdf_url && (
+                    <span className="foro-card-pdf-badge" aria-label="PDF disponible">
+                      <FileText size={12} strokeWidth={2} /> PDF
+                    </span>
+                  )}
                 </div>
                 <div className="foro-card-body">
                   <h3 className="dbt-serif">{a.title}</h3>
@@ -196,11 +201,47 @@ export default function ForoSection() {
                 <span className="foro-card-meta-sep">·</span>
                 <span>{fmtDate(active)}</span>
               </div>
-              <div className="foro-modal-content">
-                {active.content.split(/\n{2,}/).map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </div>
+              {active.pdf_url && (
+                <div className="foro-modal-pdf-actions" data-testid="foro-modal-pdf">
+                  <a
+                    href={buildSrc(active.pdf_url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="foro-modal-pdf-btn foro-modal-pdf-btn--primary"
+                    download={active.pdf_name || undefined}
+                    data-testid="foro-modal-pdf-download"
+                  >
+                    <Download size={14} strokeWidth={1.8} />
+                    <span>Descargar PDF</span>
+                  </a>
+                  <a
+                    href={buildSrc(active.pdf_url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="foro-modal-pdf-btn"
+                    data-testid="foro-modal-pdf-view"
+                  >
+                    <FileText size={14} strokeWidth={1.8} />
+                    <span>Abrir en nueva pestaña</span>
+                  </a>
+                </div>
+              )}
+              {active.content && active.content.trim() && (
+                <div className="foro-modal-content">
+                  {active.content.split(/\n{2,}/).map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+              )}
+              {active.pdf_url && (
+                <div className="foro-modal-pdf-embed" data-testid="foro-modal-pdf-embed">
+                  <iframe
+                    src={buildSrc(active.pdf_url) + "#view=FitH"}
+                    title={active.title}
+                    aria-label={`Vista previa del PDF: ${active.title}`}
+                  />
+                </div>
+              )}
             </div>
           </article>
         </div>

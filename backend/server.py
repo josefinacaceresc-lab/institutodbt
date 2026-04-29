@@ -35,7 +35,10 @@ ADMIN_PIN = os.environ.get('ADMIN_PIN', '240875').strip()
 UPLOAD_DIR = ROOT_DIR / 'uploads'
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 ALLOWED_IMAGE_EXT = {'.jpg', '.jpeg', '.png', '.webp', '.gif'}
+ALLOWED_PDF_EXT = {'.pdf'}
+ALLOWED_UPLOAD_EXT = ALLOWED_IMAGE_EXT | ALLOWED_PDF_EXT
 MAX_IMAGE_BYTES = 8 * 1024 * 1024  # 8 MB
+MAX_PDF_BYTES = 25 * 1024 * 1024  # 25 MB
 
 # In-memory session store (token -> expiry timestamp)
 _admin_sessions: dict[str, float] = {}
@@ -244,9 +247,11 @@ class ArticleBase(BaseModel):
     title: str = Field(..., min_length=2, max_length=200)
     author: str = Field(..., min_length=2, max_length=120)
     summary: Optional[str] = Field(default=None, max_length=400)
-    content: str = Field(..., min_length=1, max_length=50000)
+    content: str = Field(default="", max_length=50000)
     category: Optional[str] = Field(default=None, max_length=80)
     cover_url: Optional[str] = Field(default=None, max_length=500)
+    pdf_url: Optional[str] = Field(default=None, max_length=500)
+    pdf_name: Optional[str] = Field(default=None, max_length=200)
     article_date: Optional[str] = Field(default=None, max_length=40)
 
 
@@ -331,16 +336,26 @@ async def admin_upload(
     _: bool = Depends(require_admin),
 ):
     ext = Path(file.filename or '').suffix.lower()
-    if ext not in ALLOWED_IMAGE_EXT:
-        raise HTTPException(status_code=400, detail="Formato no permitido. Usa JPG/PNG/WEBP/GIF.")
+    if ext not in ALLOWED_UPLOAD_EXT:
+        raise HTTPException(status_code=400, detail="Formato no permitido. Usa JPG/PNG/WEBP/GIF/PDF.")
+    is_pdf = ext in ALLOWED_PDF_EXT
+    max_bytes = MAX_PDF_BYTES if is_pdf else MAX_IMAGE_BYTES
     content = await file.read()
-    if len(content) > MAX_IMAGE_BYTES:
+    if len(content) > max_bytes:
+        if is_pdf:
+            raise HTTPException(status_code=400, detail="PDF demasiado grande (máx 25MB).")
         raise HTTPException(status_code=400, detail="Imagen demasiado grande (máx 8MB).")
     filename = _safe_filename(file.filename or f"upload{ext}")
     path = UPLOAD_DIR / filename
     path.write_bytes(content)
     url = f"/api/uploads/{filename}"
-    return {"url": url, "filename": filename, "size": len(content)}
+    return {
+        "url": url,
+        "filename": filename,
+        "original_name": file.filename or filename,
+        "size": len(content),
+        "kind": "pdf" if is_pdf else "image",
+    }
 
 
 @api_router.get("/articles", response_model=List[Article])
