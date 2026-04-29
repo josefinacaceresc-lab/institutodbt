@@ -39,7 +39,7 @@ MAX_IMAGE_BYTES = 8 * 1024 * 1024  # 8 MB
 
 # In-memory session store (token -> expiry timestamp)
 _admin_sessions: dict[str, float] = {}
-_SESSION_TTL_SEC = 60 * 60 * 24  # 24h
+_SESSION_TTL_SEC = 60 * 60 * 48  # 48h
 
 try:
     import resend  # type: ignore
