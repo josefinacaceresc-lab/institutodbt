@@ -233,11 +233,11 @@ export const DIRECCION = [
 
 export const EQUIPO_CLINICO = [
   {
-    initials: "FM",
-    name: "Dr. Felipe Moraga",
-    role: "Médico Psiquiatra",
-    bio: "Médico cirujano U. de La Frontera, psiquiatra U. de Valparaíso. Especialista en desregulación emocional, trastornos de personalidad e impulsividad. Formación en DBT y psiquiatría del adulto.",
-    tags: ["Psiquiatría", "DBT"],
+    initials: "LA",
+    name: "Dr. Luis Acuña San Martín",
+    role: "Médico Psiquiatra · Adicciones, Personalidad & Psicosis",
+    bio: "Titulado en la Pontificia Universidad Católica de Chile (1992) y formado en el Instituto Psiquiátrico Dr. Horwitz Barak. Certificación CONACEM. Médico psiquiatra tratante en la Unidad de Corta Estadía Hospitalaria del Instituto Psiquiátrico. Autor y coautor de múltiples investigaciones; coeditor de la revista Psiquiatría y Salud Mental, de la Sociedad Chilena de Salud Mental.",
+    tags: ["Psiquiatría", "CONACEM", "Adicciones"],
   },
   {
     initials: "FB",
