@@ -43,17 +43,21 @@ export default function ForoSection() {
 
   useEffect(() => {
     let alive = true;
-    axios
-      .get(`${API}/articles?limit=50`)
-      .then((res) => {
-        if (alive) setArticles(res.data || []);
-      })
-      .catch(() => {
+    const fetchArticles = async (retries = 2) => {
+      try {
+        const res = await axios.get(`${API}/articles?limit=50`, { timeout: 12000 });
+        if (alive) setArticles(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        if (retries > 0) {
+          setTimeout(() => fetchArticles(retries - 1), 1500);
+          return;
+        }
         if (alive) setArticles([]);
-      })
-      .finally(() => {
+      } finally {
         if (alive) setLoading(false);
-      });
+      }
+    };
+    fetchArticles();
     return () => {
       alive = false;
     };
@@ -108,7 +112,7 @@ export default function ForoSection() {
             {articles.map((a) => (
               <article
                 key={a.id}
-                className="foro-card fade-up"
+                className="foro-card"
                 data-testid={`foro-card-${a.id}`}
                 onClick={() => setActive(a)}
                 role="button"
