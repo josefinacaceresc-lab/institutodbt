@@ -7,6 +7,16 @@ import { Link } from "react-router-dom";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const TOKEN_KEY = "dbt_admin_token";
 
+const TOASTER_OPTIONS = {
+  style: {
+    background: "#0E2333",
+    border: "1px solid rgba(191,160,106,0.4)",
+    color: "#fff",
+    borderRadius: 0,
+    fontFamily: "DM Sans, sans-serif",
+  },
+};
+
 const EMPTY_FORM = {
   id: null,
   title: "",
@@ -95,8 +105,8 @@ export default function AdminPage() {
   const onLogout = async () => {
     try {
       await axios.post(`${API}/admin/logout`, {}, { headers: authHeaders() });
-    } catch (e) {
-      /* ignore */
+    } catch (err) {
+      console.warn("Logout request failed", err);
     }
     localStorage.removeItem(TOKEN_KEY);
     setToken("");
@@ -251,7 +261,7 @@ export default function AdminPage() {
   if (!token) {
     return (
       <div className="admin-shell admin-login" data-testid="admin-login">
-        <Toaster position="top-center" theme="dark" toastOptions={{ style: { background: "#0E2333", border: "1px solid rgba(191,160,106,0.4)", color: "#fff", borderRadius: 0, fontFamily: "DM Sans, sans-serif" } }} />
+        <Toaster position="top-center" theme="dark" toastOptions={TOASTER_OPTIONS} />
         <form className="admin-login-card" onSubmit={onLogin}>
           <span className="label label-center">Acceso administrativo</span>
           <h1 className="dbt-serif admin-login-title">
@@ -290,7 +300,7 @@ export default function AdminPage() {
   // ═══ Admin panel ═══
   return (
     <div className="admin-shell" data-testid="admin-panel">
-      <Toaster position="top-center" theme="dark" toastOptions={{ style: { background: "#0E2333", border: "1px solid rgba(191,160,106,0.4)", color: "#fff", borderRadius: 0, fontFamily: "DM Sans, sans-serif" } }} />
+      <Toaster position="top-center" theme="dark" toastOptions={TOASTER_OPTIONS} />
 
       <header className="admin-bar">
         <div className="admin-bar-inner">

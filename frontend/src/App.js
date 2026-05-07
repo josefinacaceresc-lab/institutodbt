@@ -24,6 +24,16 @@ import Footer from "@/components/site/Footer";
 import WDBTAConference from "@/components/site/WDBTAConference";
 import AdminPage from "@/pages/AdminPage";
 
+const TOASTER_OPTIONS = {
+  style: {
+    background: "#0E2333",
+    border: "1px solid rgba(191,160,106,0.35)",
+    color: "#fff",
+    borderRadius: 0,
+    fontFamily: "DM Sans, sans-serif",
+  },
+};
+
 function useFadeUp() {
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
@@ -96,15 +106,7 @@ function Landing() {
       <Toaster
         position="top-center"
         theme="dark"
-        toastOptions={{
-          style: {
-            background: "#0E2333",
-            border: "1px solid rgba(191,160,106,0.35)",
-            color: "#fff",
-            borderRadius: 0,
-            fontFamily: "DM Sans, sans-serif",
-          },
-        }}
+        toastOptions={TOASTER_OPTIONS}
       />
     </div>
   );

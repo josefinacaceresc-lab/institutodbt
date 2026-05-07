@@ -1,7 +1,6 @@
 import { Cpu, ArrowUpRight } from "lucide-react";
 import {
   PUBLICATIONS,
-  TEAM,
   TESTIMONIALS,
   SITE,
   DIRECCION,
@@ -171,8 +170,8 @@ export function TeamSection() {
                 <p className="direccion-bio">{leader.bio}</p>
 
                 <ul className="direccion-credentials" role="list">
-                  {leader.credentials.map((c, i) => (
-                    <li key={i}>{c}</li>
+                  {leader.credentials.map((c) => (
+                    <li key={c}>{c}</li>
                   ))}
                 </ul>
 
@@ -257,8 +256,6 @@ export function TeamSection() {
     </section>
   );
 }
-// eslint-disable-next-line no-unused-vars
-const _unused = TEAM;
 
 export function TestimonialsSection() {
   return (
@@ -273,7 +270,7 @@ export function TestimonialsSection() {
         <div className="testimonials-grid" data-testid="testimonials-grid">
           {TESTIMONIALS.map((t, i) => (
             <div
-              key={i}
+              key={t.author || `testimonial-${i}`}
               className="testimonial-card fade-up"
               data-testid={`testimonial-${i}`}
             >

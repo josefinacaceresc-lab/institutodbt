@@ -15,8 +15,8 @@ function fmtDate(art) {
           year: "numeric",
         });
       }
-    } catch (e) {
-      /* ignore */
+    } catch (err) {
+      console.warn("fmtDate parse failed", err);
     }
     return art.article_date;
   }
@@ -235,7 +235,7 @@ export default function ForoSection() {
               {active.content && active.content.trim() && (
                 <div className="foro-modal-content">
                   {active.content.split(/\n{2,}/).map((p, i) => (
-                    <p key={i}>{p}</p>
+                    <p key={`${active.id}-p-${i}`}>{p}</p>
                   ))}
                 </div>
               )}

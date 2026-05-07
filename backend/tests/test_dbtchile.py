@@ -13,7 +13,7 @@ class TestHealth:
         data = r.json()
         assert data["status"] == "ok"
         assert "email_configured" in data
-        assert data["email_configured"] == False  # key is empty
+        assert data["email_configured"] is False  # key is empty
 
     def test_root(self):
         r = requests.get(f"{BASE_URL}/api/")
@@ -50,7 +50,7 @@ class TestContact:
         # Verify via GET
         r2 = requests.get(f"{BASE_URL}/api/contact")
         assert r2.status_code == 200
-        ids = [l["id"] for l in r2.json()]
+        ids = [item["id"] for item in r2.json()]
         assert lead_id in ids
 
     def test_list_leads_no_mongo_id(self):
