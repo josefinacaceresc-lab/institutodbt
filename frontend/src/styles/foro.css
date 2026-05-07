@@ -640,17 +640,58 @@
     position: relative;
     border: 1px solid var(--border);
     padding: 8px;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     gap: 8px;
     align-items: stretch;
-    max-width: 320px;
+    max-width: 360px;
 }
 .admin-cover-preview img {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
+}
+.admin-cover-broken {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px 14px;
+    background: #fff8e1;
+    border: 1px solid #e6c97a;
+    color: #8a6800;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.admin-cover-broken small {
+    font-family: "DM Sans", sans-serif;
+    color: #6b5a2a;
+    word-break: break-all;
+    font-size: 10.5px;
+}
+.admin-cover-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.admin-cover-replace {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: var(--gold);
+    padding: 7px 14px;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+}
+.admin-cover-replace:hover {
+    background: var(--gold);
+    color: var(--navy);
 }
 .admin-cover-remove {
     background: none;
@@ -665,8 +706,8 @@
     transition: border-color 0.25s, color 0.25s;
 }
 .admin-cover-remove:hover {
-    border-color: var(--navy);
-    color: var(--navy);
+    border-color: #b13a3a;
+    color: #b13a3a;
 }
 
 .admin-form-actions {

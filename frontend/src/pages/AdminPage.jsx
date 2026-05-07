@@ -354,14 +354,44 @@ export default function AdminPage() {
                 <label className="admin-label">Imagen de portada</label>
                 {form.cover_url ? (
                   <div className="admin-cover-preview">
-                    <img src={buildSrc(form.cover_url)} alt="Portada" />
-                    <button
-                      type="button"
-                      className="admin-cover-remove"
-                      onClick={() => setForm((f) => ({ ...f, cover_url: "" }))}
+                    <img
+                      src={buildSrc(form.cover_url)}
+                      alt="Portada"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        const sib = e.target.nextElementSibling;
+                        if (sib) sib.style.display = "flex";
+                      }}
+                    />
+                    <div
+                      className="admin-cover-broken"
+                      style={{ display: "none" }}
                     >
-                      Quitar imagen
-                    </button>
+                      ⚠ La imagen no se puede previsualizar (¿subiste un PDF aquí por error?)
+                      <br />
+                      <small>{form.cover_url}</small>
+                    </div>
+                    <div className="admin-cover-actions">
+                      <label className="admin-cover-replace">
+                        <ImageIcon size={14} />
+                        <span>{uploading ? "Subiendo…" : "Reemplazar"}</span>
+                        <input
+                          ref={fileRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => onUpload(e.target.files?.[0])}
+                          hidden
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        className="admin-cover-remove"
+                        onClick={() => setForm((f) => ({ ...f, cover_url: "" }))}
+                        data-testid="admin-cover-remove"
+                      >
+                        Quitar imagen
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <label className="admin-upload" data-testid="admin-upload-label">
@@ -394,13 +424,27 @@ export default function AdminPage() {
                       </a>
                       <span className="admin-pdf-hint">Adjunto · click para previsualizar</span>
                     </div>
-                    <button
-                      type="button"
-                      className="admin-cover-remove"
-                      onClick={() => setForm((f) => ({ ...f, pdf_url: "", pdf_name: "" }))}
-                    >
-                      Quitar
-                    </button>
+                    <div className="admin-cover-actions">
+                      <label className="admin-cover-replace">
+                        <FileText size={14} />
+                        <span>{uploadingPdf ? "Subiendo…" : "Reemplazar"}</span>
+                        <input
+                          ref={pdfRef}
+                          type="file"
+                          accept="application/pdf,.pdf"
+                          onChange={(e) => onUploadPdf(e.target.files?.[0])}
+                          hidden
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        className="admin-cover-remove"
+                        onClick={() => setForm((f) => ({ ...f, pdf_url: "", pdf_name: "" }))}
+                        data-testid="admin-pdf-remove"
+                      >
+                        Quitar PDF
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <label className="admin-upload" data-testid="admin-pdf-upload-label">
