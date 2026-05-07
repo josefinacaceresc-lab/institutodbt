@@ -345,15 +345,49 @@ async def admin_upload(
         if is_pdf:
             raise HTTPException(status_code=400, detail="PDF demasiado grande (máx 25MB).")
         raise HTTPException(status_code=400, detail="Imagen demasiado grande (máx 8MB).")
-    filename = _safe_filename(file.filename or f"upload{ext}")
+
+    # Auto-optimize images: resize + compress for fast web delivery
+    final_ext = ext
+    final_bytes = content
+    if not is_pdf and ext != '.gif':
+        try:
+            from PIL import Image  # type: ignore
+            from io import BytesIO
+            img = Image.open(BytesIO(content))
+            # Convert RGBA/P → RGB on white bg for JPEG output (smaller)
+            if img.mode in ("RGBA", "P", "LA"):
+                bg = Image.new("RGB", img.size, (255, 255, 255))
+                if img.mode == "P":
+                    img = img.convert("RGBA")
+                bg.paste(img, mask=img.split()[-1] if img.mode in ("RGBA", "LA") else None)
+                img = bg
+            elif img.mode != "RGB":
+                img = img.convert("RGB")
+            # Limit max dimension to 1600px (preserves quality on retina)
+            max_side = 1600
+            if max(img.size) > max_side:
+                ratio = max_side / max(img.size)
+                new_size = (int(img.size[0] * ratio), int(img.size[1] * ratio))
+                img = img.resize(new_size, Image.LANCZOS)
+            buf = BytesIO()
+            img.save(buf, format="JPEG", quality=82, optimize=True, progressive=True)
+            final_bytes = buf.getvalue()
+            final_ext = ".jpg"
+        except Exception as e:
+            logger.warning(f"Image optimization skipped: {e}")
+
+    src_name = file.filename or f"upload{ext}"
+    if final_ext != ext:
+        src_name = Path(src_name).stem + final_ext
+    filename = _safe_filename(src_name)
     path = UPLOAD_DIR / filename
-    path.write_bytes(content)
+    path.write_bytes(final_bytes)
     url = f"/api/uploads/{filename}"
     return {
         "url": url,
         "filename": filename,
         "original_name": file.filename or filename,
-        "size": len(content),
+        "size": len(final_bytes),
         "kind": "pdf" if is_pdf else "image",
     }
 
@@ -435,6 +469,15 @@ async def delete_article(article_id: str, _: bool = Depends(require_admin)):
 
 # Include the router in the main app
 app.include_router(api_router)
+
+
+@app.middleware("http")
+async def cache_uploaded_assets(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api/uploads/"):
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    return response
+
 
 # Mount uploads as static files at /api/uploads/*
 app.mount("/api/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")

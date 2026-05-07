@@ -125,7 +125,9 @@ export default function ForoSection() {
                     <img
                       src={buildSrc(a.cover_url)}
                       alt={a.title}
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
+                      fetchpriority="high"
                     />
                   ) : (
                     <div className="foro-card-cover-fallback">
