@@ -194,12 +194,6 @@ export const TEAM = [
     "Psicóloga Clínica",
     "Programa DBT adultos y grupos de entrenamiento en habilidades.",
   ],
-  [
-    "VC",
-    "Vanessa Contreras",
-    "Psicóloga Clínica",
-    "Programa DBT adolescentes y trabajo con familias.",
-  ],
 ];
 
 export const DIRECCION = [
@@ -259,13 +253,6 @@ export const EQUIPO_CLINICO = [
     role: "Psicóloga Clínica",
     bio: "U. del Desarrollo. Formación en psicología clínica y psico-jurídica. Diplomado en Psicología Jurídica, PUC. Curso RO DBT nivel 1. Experiencia en contextos penitenciarios y psiquiátricos.",
     tags: ["DBT", "RO-DBT"],
-  },
-  {
-    initials: "VC",
-    name: "Vanessa Contreras",
-    role: "Terapeuta Ocupacional · Infantojuvenil",
-    bio: "Especialista en neurodesarrollo, integración sensorial y TEA. Certificación internacional ADOS-2 y ADI-R. Intervención en trastornos de personalidad y hábitos saludables.",
-    tags: ["TO", "ADOS-2", "TEA"],
   },
   {
     initials: "CS",

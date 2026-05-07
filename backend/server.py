@@ -94,6 +94,26 @@ class ContactLead(BaseModel):
     created_at: datetime
 
 
+class WhatsAppClickIn(BaseModel):
+    source: Optional[str] = Field(default="unknown", max_length=40)
+    referrer: Optional[str] = Field(default=None, max_length=500)
+
+
+class StatsBucket(BaseModel):
+    total: int
+    today: int
+    week: int
+    month: int
+
+
+class StatsResponse(BaseModel):
+    whatsapp: StatsBucket
+    whatsapp_by_source: dict
+    leads: StatsBucket
+    leads_email_sent: int
+    recent_leads: List[ContactLead]
+
+
 # ─── Email helpers ──────────────────────────────────────
 def _build_lead_email_html(lead: dict) -> str:
     safe = {k: (str(v) if v is not None else '') for k, v in lead.items()}
@@ -465,6 +485,83 @@ async def delete_article(article_id: str, _: bool = Depends(require_admin)):
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Artículo no encontrado")
     return {"ok": True}
+
+
+@api_router.post("/whatsapp-click", status_code=201)
+async def track_whatsapp_click(payload: WhatsAppClickIn):
+    doc = {
+        "id": str(uuid.uuid4()),
+        "source": (payload.source or "unknown").strip()[:40] or "unknown",
+        "referrer": (payload.referrer or "")[:500] or None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    try:
+        await db.wa_clicks.insert_one({**doc})
+    except Exception as e:
+        logger.warning(f"WA click insert failed: {e}")
+    return {"ok": True}
+
+
+@api_router.get("/admin/stats", response_model=StatsResponse)
+async def admin_stats(_: bool = Depends(require_admin)):
+    now = datetime.now(timezone.utc)
+    today_iso = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    week_iso = (now - timedelta(days=7)).isoformat()
+    month_iso = (now - timedelta(days=30)).isoformat()
+
+    async def _counts(coll):
+        total = await coll.count_documents({})
+        today = await coll.count_documents({"created_at": {"$gte": today_iso}})
+        week = await coll.count_documents({"created_at": {"$gte": week_iso}})
+        month = await coll.count_documents({"created_at": {"$gte": month_iso}})
+        return StatsBucket(total=total, today=today, week=week, month=month)
+
+    wa_bucket = await _counts(db.wa_clicks)
+    leads_bucket = await _counts(db.leads)
+
+    # WhatsApp by source
+    wa_by_source: dict = {}
+    try:
+        cursor = db.wa_clicks.aggregate([
+            {"$group": {"_id": "$source", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+        ])
+        async for row in cursor:
+            wa_by_source[row.get("_id") or "unknown"] = row.get("count", 0)
+    except Exception as e:
+        logger.warning(f"WA aggregation failed: {e}")
+
+    # Email sent count
+    leads_email_sent = await db.leads.count_documents({"email_status": "sent"})
+
+    # Recent 10 leads
+    recent_rows = await db.leads.find({}, {"_id": 0}).sort("created_at", -1).limit(10).to_list(10)
+    recent_leads: List[ContactLead] = []
+    for r in recent_rows:
+        ca = r.get("created_at")
+        if isinstance(ca, str):
+            try:
+                ca = datetime.fromisoformat(ca)
+            except Exception:
+                ca = datetime.now(timezone.utc)
+        recent_leads.append(ContactLead(
+            id=r.get("id", str(uuid.uuid4())),
+            name=r.get("name", ""),
+            email=r.get("email", "unknown@example.com"),
+            phone=r.get("phone"),
+            message=r.get("message"),
+            program=r.get("program"),
+            email_status=r.get("email_status", "pending"),
+            created_at=ca or datetime.now(timezone.utc),
+        ))
+
+    return StatsResponse(
+        whatsapp=wa_bucket,
+        whatsapp_by_source=wa_by_source,
+        leads=leads_bucket,
+        leads_email_sent=leads_email_sent,
+        recent_leads=recent_leads,
+    )
 
 
 # Include the router in the main app
