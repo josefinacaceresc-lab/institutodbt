@@ -218,7 +218,18 @@ export default function AdminPage() {
       resetForm();
       loadArticles();
     } catch (err) {
-      toast.error(err?.response?.data?.detail || "Error al guardar");
+      const detail = err?.response?.data?.detail;
+      let msg = "Error al guardar";
+      if (typeof detail === "string") {
+        msg = detail;
+      } else if (Array.isArray(detail) && detail[0]) {
+        const first = detail[0];
+        const fieldRaw = Array.isArray(first.loc) ? first.loc[first.loc.length - 1] : "";
+        const field = String(fieldRaw || "campo").replace(/_/g, " ");
+        msg = `${field}: ${first.msg}`;
+      }
+      console.error("Article save failed", err?.response?.status, detail);
+      toast.error(msg);
     } finally {
       setSaving(false);
     }

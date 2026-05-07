@@ -244,14 +244,14 @@ async def list_contact_leads(limit: int = 100):
 
 # ─── Foro · Article models ──────────────────────────────
 class ArticleBase(BaseModel):
-    title: str = Field(..., min_length=2, max_length=200)
-    author: str = Field(..., min_length=2, max_length=120)
-    summary: Optional[str] = Field(default=None, max_length=400)
-    content: str = Field(default="", max_length=50000)
-    category: Optional[str] = Field(default=None, max_length=80)
+    title: str = Field(..., min_length=1, max_length=300)
+    author: str = Field(..., min_length=1, max_length=200)
+    summary: Optional[str] = Field(default=None, max_length=600)
+    content: str = Field(default="", max_length=200000)
+    category: Optional[str] = Field(default=None, max_length=120)
     cover_url: Optional[str] = Field(default=None, max_length=500)
     pdf_url: Optional[str] = Field(default=None, max_length=500)
-    pdf_name: Optional[str] = Field(default=None, max_length=200)
+    pdf_name: Optional[str] = Field(default=None, max_length=300)
     article_date: Optional[str] = Field(default=None, max_length=40)
 
 
