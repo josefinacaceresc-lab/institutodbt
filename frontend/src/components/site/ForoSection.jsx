@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowUpRight, Calendar, FileText, Download } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -233,10 +235,10 @@ export default function ForoSection() {
                 </div>
               )}
               {active.content && active.content.trim() && (
-                <div className="foro-modal-content">
-                  {active.content.split(/\n{2,}/).map((p, i) => (
-                    <p key={`${active.id}-p-${i}`}>{p}</p>
-                  ))}
+                <div className="foro-modal-content foro-modal-md">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {active.content}
+                  </ReactMarkdown>
                 </div>
               )}
               {active.pdf_url && (
