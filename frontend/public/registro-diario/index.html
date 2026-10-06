@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#243447">\n  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Registro Diario">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <title>Registro Diario</title>
+  <style>
+    :root{--bg:#f4f6f8;--card:#fff;--ink:#17202a;--muted:#68737d;--line:#dfe5ea;--accent:#243447;--soft:#eef2f5;--ok:#1d6b47}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    main{max-width:820px;margin:auto;padding:18px 14px 40px} h1{font-size:26px;margin:0 0 4px} h2{font-size:19px;margin:0 0 12px}
+    .sub,.small{color:var(--muted)} .sub{margin-bottom:14px}.small{font-size:12px}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .tabs{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}.tab,button{border:0;border-radius:11px;padding:11px 13px;font-weight:700;cursor:pointer}
+    .tab{background:#fff;border:1px solid var(--line)} .tab.active,.primary{background:var(--accent);color:#fff}.secondary{background:var(--soft);color:var(--ink)}
+    .danger{background:#fde8e8;color:#8b1e1e}.install{background:#111827;color:#fff}
+    .view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+    .grid{display:grid;gap:13px}.g2{grid-template-columns:1fr 1fr}@media(max-width:680px){.g2{grid-template-columns:1fr}}
+    label{display:block;font-weight:650;margin-bottom:6px}textarea,input,select{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 11px}
+    textarea{min-height:82px;resize:vertical}.range{display:grid;grid-template-columns:1fr 42px;gap:9px;align-items:center}.range input{padding:0}
+    .score{text-align:center;font-weight:800}.pills{display:flex;flex-wrap:wrap;gap:7px}.pill{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#fff}
+    .pill input{width:auto}.status{font-size:13px;color:var(--ok);min-height:18px;margin-top:8px}.banner{font-size:13px;background:#fff8e7;border:1px solid #ecd7a0;border-radius:12px;padding:10px 12px}
+    table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:var(--soft)}
+    .scroll{overflow:auto}.tag{display:inline-block;background:var(--soft);padding:3px 6px;border-radius:999px;margin:2px}
+  </style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div><h1>Registro Diario</h1><div class="sub">Estado, flexibilidad, modos y funcionamiento cotidiano.</div></div>
+    <button id="installBtn" class="install" hidden>Instalar</button>
+  </div>
+  <div class="banner">Los registros quedan guardados en este dispositivo. Este diario complementa, pero no reemplaza, la evaluación clínica.</div>
+  <div class="small" id="net">Comprobando conexión…</div>
+
+  <div class="tabs">
+    <button class="tab active" data-v="daily">Diario</button>
+    <button class="tab" data-v="modes">Modos</button>
+    <button class="tab" data-v="weekly">Semana</button>
+    <button class="tab" data-v="history">Historial</button>
+  </div>
+
+  <section id="daily" class="view active">
+    <div class="card"><h2>1. Momento actual</h2>
+      <div class="grid g2">
+        <div><label>Fecha</label><input id="date" type="date"></div>
+        <div><label>Hora</label><input id="time" type="time"></div>
+        <div><label>Horas de sueño</label><input id="sleep" inputmode="decimal" placeholder="Ej. 7,5"></div>
+        <div><label>Velocidad mental</label><select id="speed"><option></option><option>Muy lenta</option><option>Lenta</option><option>Habitual</option><option>Rápida</option><option>Muy rápida</option></select></div>
+      </div>
+    </div>
+
+    <div class="card"><h2>2. Estado 0–10</h2><div id="ranges" class="grid g2"></div></div>
+
+    <div class="card"><h2>3. Contexto</h2>
+      <div class="grid g2">
+        <div><label>¿Qué ocurrió?</label><textarea id="event"></textarea></div>
+        <div><label>¿Qué me dije o predije?</label><textarea id="thought"></textarea></div>
+        <div><label>¿Qué cambió respecto de otros días?</label><textarea id="change"></textarea></div>
+        <div><label>¿Qué necesito?</label><textarea id="need"></textarea></div>
+      </div>
+    </div>
+
+    <div class="card"><h2>4. Modos</h2><div class="pills" id="modePills"></div>
+      <div class="grid g2" style="margin-top:13px">
+        <div><label>Respuesta automática</label><textarea id="automatic"></textarea></div>
+        <div><label>Respuesta flexible / Adulto Sano</label><textarea id="healthy"></textarea></div>
+        <div><label>¿Qué sigue siendo verdadero de mí aunque cambie mi estado?</label><textarea id="invariants"></textarea></div>
+        <div><label>Acción concreta para próximas 24 h</label><textarea id="action"></textarea></div>
+      </div>
+    </div>
+    <button class="primary" onclick="saveEntry()">Guardar registro</button>
+    <button class="secondary" onclick="clearForm()">Limpiar</button>
+    <div id="saveStatus" class="status"></div>
+  </section>
+
+  <section id="modes" class="view">
+    <div class="card"><h2>Mapa personal</h2>
+      <div class="grid g2">
+        <div><label>Vulnerable</label><textarea id="m1"></textarea></div>
+        <div><label>Crítico / Exigente</label><textarea id="m2"></textarea></div>
+        <div><label>Protector Intelectualizador</label><textarea id="m3"></textarea></div>
+        <div><label>Protector Desconectado</label><textarea id="m4"></textarea></div>
+        <div><label>Sobrecompensador</label><textarea id="m5"></textarea></div>
+        <div><label>Adulto Sano / Flexible</label><textarea id="m6"></textarea></div>
+      </div>
+      <button class="primary" onclick="saveModes()">Guardar mapa</button><div id="modeStatus" class="status"></div>
+    </div>
+  </section>
+
+  <section id="weekly" class="view">
+    <div class="card"><h2>Resumen semanal</h2>
+      <div class="grid g2">
+        <div><label>Desde</label><input id="from" type="date"></div><div><label>Hasta</label><input id="to" type="date"></div>
+        <div><label>Señales tempranas</label><textarea id="w1"></textarea></div><div><label>Qué aumentó rigidez o crítica</label><textarea id="w2"></textarea></div>
+        <div><label>Qué aumentó flexibilidad o conexión</label><textarea id="w3"></textarea></div><div><label>Qué permaneció estable entre estados</label><textarea id="w4"></textarea></div>
+      </div>
+      <button class="primary" onclick="weeklyAverage()">Calcular promedios</button><div id="weekStatus" class="status"></div>
+    </div>
+  </section>
+
+  <section id="history" class="view">
+    <div class="card"><h2>Historial</h2>
+      <button class="secondary" onclick="renderHistory()">Actualizar</button>
+      <button class="secondary" onclick="exportCSV()">Exportar CSV</button>
+      <button class="danger" onclick="eraseAll()">Borrar registros</button>
+      <div class="scroll"><table><thead><tr><th>Fecha</th><th>Ánimo</th><th>Activación</th><th>Crítica</th><th>“Químico”</th><th>Flexibilidad</th><th>Modos</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const variables=[
+ ["mood","Ánimo","0 = muy bajo · 10 = muy alto"],
+ ["activation","Energía / activación","0 = mínima · 10 = máxima"],
+ ["rumination","Rumiación","0 = nada · 10 = domina el día"],
+ ["criticism","Dictador / autocrítica","0 = nada · 10 = muy intenso"],
+ ["perfectionism","Exigencia / perfeccionismo","0 = flexible · 10 = extremo"],
+ ["chemical","Certeza: «esto es solo químico»","0 = nada · 10 = certeza total"],
+ ["flexibility","Apertura a explicaciones alternativas","0 = ninguna · 10 = mucha"],
+ ["connection","Conexión con otros","0 = desconectado · 10 = conectado"],
+ ["identity","Claridad de quién soy / qué quiero","0 = nada clara · 10 = muy clara"],
+ ["otherstate","Acceso a otros estados de mí","0 = inaccesibles · 10 = accesibles"]
+];
+const modes=["Vulnerable","Crítico/Exigente","Protector Intelectualizador","Protector Desconectado","Sobrecompensador","Adulto Sano"];
+
+function init(){
+ const ranges=document.getElementById("ranges");
+ variables.forEach(([id,label,help])=>{
+  const d=document.createElement("div");
+  d.innerHTML='<label>'+label+'</label><div class="range"><input id="'+id+'" type="range" min="0" max="10" value="5" oninput="document.getElementById(\''+id+'Out\').textContent=this.value"><div id="'+id+'Out" class="score">5</div></div><div class="small">'+help+'</div>';
+  ranges.appendChild(d);
+ });
+ const p=document.getElementById("modePills");
+ modes.forEach(m=>{const l=document.createElement("label");l.className="pill";l.innerHTML='<input class="mc" type="checkbox" value="'+m+'"> '+m;p.appendChild(l)});
+ const n=new Date();date.value=n.toISOString().slice(0,10);time.value=n.toTimeString().slice(0,5);
+ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.v).classList.add("active");if(b.dataset.v==="history")renderHistory()});
+ loadModes();updateNetwork();
+}
+const entries=()=>JSON.parse(localStorage.getItem("registroDiario")||"[]");
+function saveEntry(){
+ const e={date:date.value,time:time.value,sleep:sleep.value,speed:speed.value,event:event.value,thought:thought.value,change:change.value,need:need.value,automatic:automatic.value,healthy:healthy.value,invariants:invariants.value,action:action.value,modes:[...document.querySelectorAll(".mc:checked")].map(x=>x.value)};
+ variables.forEach(([id])=>e[id]=+document.getElementById(id).value);
+ const a=entries();a.push(e);localStorage.setItem("registroDiario",JSON.stringify(a));saveStatus.textContent="Guardado en este dispositivo.";
+}
+function clearForm(){document.querySelectorAll("#daily textarea").forEach(x=>x.value="");document.querySelectorAll(".mc").forEach(x=>x.checked=false);variables.forEach(([id])=>{document.getElementById(id).value=5;document.getElementById(id+"Out").textContent=5});sleep.value="";saveStatus.textContent=""}
+function saveModes(){let o={};for(let i=1;i<=6;i++)o["m"+i]=document.getElementById("m"+i).value;localStorage.setItem("registroModos",JSON.stringify(o));modeStatus.textContent="Mapa guardado."}
+function loadModes(){let o=JSON.parse(localStorage.getItem("registroModos")||"{}");for(let i=1;i<=6;i++)if(o["m"+i])document.getElementById("m"+i).value=o["m"+i]}
+function weeklyAverage(){if(!from.value||!to.value){weekStatus.textContent="Selecciona las fechas.";return}const a=entries().filter(x=>x.date>=from.value&&x.date<=to.value);if(!a.length){weekStatus.textContent="No hay registros en ese rango.";return}const av=id=>(a.reduce((s,x)=>s+(+x[id]||0),0)/a.length).toFixed(1);weekStatus.textContent=a.length+" registros · ánimo "+av("mood")+" · activación "+av("activation")+" · crítica "+av("criticism")+" · químico "+av("chemical")+" · flexibilidad "+av("flexibility")+" · conexión "+av("connection")}
+function renderHistory(){historyBody.innerHTML="";entries().slice().reverse().forEach(e=>{const tr=document.createElement("tr");tr.innerHTML="<td>"+(e.date||"")+"</td><td>"+e.mood+"</td><td>"+e.activation+"</td><td>"+e.criticism+"</td><td>"+e.chemical+"</td><td>"+e.flexibility+"</td><td>"+(e.modes||[]).map(m=>'<span class=tag>'+m+"</span>").join("")+"</td>";historyBody.appendChild(tr)})}
+function esc(v){return '"'+String(v??"").replaceAll('"','""')+'"'}
+function exportCSV(){const a=entries();if(!a.length){alert("No hay registros.");return}const h=["date","time","sleep",...variables.map(x=>x[0]),"speed","event","thought","change","need","modes","automatic","healthy","invariants","action"];const rows=[h.join(",")].concat(a.map(e=>h.map(k=>esc(k==="modes"?(e[k]||[]).join(" | "):e[k])).join(",")));const blob=new Blob([rows.join("\n")],{type:"text/csv;charset=utf-8"});const u=URL.createObjectURL(blob),ael=document.createElement("a");ael.href=u;ael.download="registro_diario.csv";ael.click();URL.revokeObjectURL(u)}
+function eraseAll(){if(confirm("¿Borrar todos los registros de este dispositivo?")){localStorage.removeItem("registroDiario");renderHistory()}}
+function updateNetwork(){net.textContent=navigator.onLine?"Conexión: online":"Conexión: offline · puedes seguir registrando"}
+addEventListener("online",updateNetwork);addEventListener("offline",updateNetwork);
+let deferredPrompt=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;installBtn.hidden=false});installBtn.onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.hidden=true};
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js"));
+init();
+</script>
+</body></html>
